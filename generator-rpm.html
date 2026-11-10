@@ -1,0 +1,2735 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Master Generator Perangkat Ajar Lengkap + LKPD & Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --biru-tua: #1a3a5c;
+            --biru-muda: #d0e4f7;
+            --biru-sangat-muda: #f0f5fa;
+            --biru-medium: #e8edf2;
+            --abu-label: #f5f6f7;
+            --kuning-muda: #fffbe6;
+            --kuning-emas: #f0c040;
+            --merah-muda: #ffd6d6;
+            --hijau-muda: #d4edda;
+            --ungu-muda: #e8d5f5;
+            --kuning-asesmen: #fff3cd;
+            --teks-utama: #1a1a2e;
+            --teks-abu: #6c757d;
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+            --hijau-tegas: #0d9488;
+            --orange: #f59e0b;
+            --ungu: #8b5cf6;
+            --hijau-logo: #1b8a4a;
+            --hijau-logo-gelap: #146b39;
+            --hijau-logo-muda: #2aa85a;
+            --merah-tombol: #dc2626;
+            --merah-tombol-gelap: #b91c1c;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+            background: #f1f5f9;
+            color: var(--teks-utama);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== DASHBOARD LAYOUT ===== */
+        #dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--hijau-logo) 0%, var(--hijau-logo-gelap) 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .sidebar-brand img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: contain;
+            border: 2px solid rgba(255,255,255,0.5);
+            padding: 3px;
+            background: #fff;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-brand h2 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .sidebar-brand p {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 16px 12px;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu .menu-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+            padding: 12px 12px 6px;
+            font-weight: 700;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 14px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: var(--transition);
+            margin-bottom: 2px;
+            cursor: pointer;
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            transform: translateX(3px);
+        }
+
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            font-weight: 700;
+            box-shadow: inset 3px 0 0 #fff;
+        }
+
+        .sidebar-menu a .menu-icon {
+            font-size: 1.15rem;
+            width: 22px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            font-size: 0.75rem;
+            opacity: 0.7;
+            text-align: center;
+        }
+
+        .sidebar-footer .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding: 8px 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .sidebar-footer .user-info .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .sidebar-footer .user-info .detail {
+            text-align: left;
+            line-height: 1.3;
+        }
+
+        .sidebar-footer .user-info .detail .name {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #fff;
+        }
+
+        .sidebar-footer .user-info .detail .role {
+            font-size: 0.65rem;
+            opacity: 0.7;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px 40px 40px;
+            background: #f1f5f9;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 2px solid #e2e8f0;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .topbar-left .topbar-logo {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: contain;
+            border: 2px solid var(--hijau-logo);
+            padding: 3px;
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        .topbar-left .topbar-identity h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--hijau-logo-gelap);
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+        }
+
+        .topbar-left .topbar-identity p {
+            font-size: 0.78rem;
+            color: var(--teks-abu);
+            margin-top: 2px;
+            line-height: 1.3;
+            max-width: 480px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .topbar-right .badge-version {
+            background: var(--hijau-logo);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .topbar-right .date-info {
+            font-size: 0.8rem;
+            color: var(--teks-abu);
+        }
+
+        /* ===== APP CONTAINER ===== */
+        #pg-app-container {
+            max-width: 100%;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .km-heading {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--biru-tua);
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--biru-tua), #2d5a7a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ===== TWO-COLUMN WORKSPACE ===== */
+        .pg-workspace {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .pg-panel {
+            background: #ffffff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px 30px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .pg-panel-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--biru-tua);
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--biru-muda);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pg-panel-title .panel-icon {
+            font-size: 1.3rem;
+        }
+
+        /* ===== FORM ===== */
+        #form-generator-master {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        #form-generator-master h3 {
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: var(--biru-tua);
+            margin-top: 4px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid var(--biru-muda);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        #form-generator-master h3 .badge-new {
+            background: var(--orange);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #form-generator-master h3 .badge-update {
+            background: var(--ungu);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pg-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px 16px;
+        }
+
+        .pg-form-grid-2 {
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        }
+
+        .pg-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .pg-form-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #334155;
+            letter-spacing: 0.3px;
+        }
+
+        .pg-form-group label .required {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+
+        .pg-form-group label .optional {
+            color: var(--teks-abu);
+            font-weight: 400;
+            font-size: 0.68rem;
+        }
+
+        .pg-form-group input,
+        .pg-form-group textarea,
+        .pg-form-group select {
+            padding: 9px 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background: #fafcff;
+            color: #1e293b;
+        }
+
+        .pg-form-group input:focus,
+        .pg-form-group textarea:focus,
+        .pg-form-group select:focus {
+            outline: none;
+            border-color: var(--biru-tua);
+            box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.12);
+            background: #ffffff;
+        }
+
+        .pg-form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .pg-form-group select {
+            appearance: auto;
+            cursor: pointer;
+        }
+
+        .pg-form-group input::placeholder,
+        .pg-form-group textarea::placeholder {
+            color: #94a3b8;
+            font-size: 0.82rem;
+        }
+
+        /* ===== SECTION CARD ===== */
+        .section-card {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 16px 18px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-card .section-title {
+            font-weight: 700;
+            color: var(--biru-tua);
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-card .section-title .icon {
+            font-size: 1.1rem;
+        }
+
+        /* ===== BUTTON ===== */
+        .pg-btn-generate {
+            background: linear-gradient(135deg, var(--hijau-logo), var(--hijau-logo-gelap));
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.08rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(27, 138, 74, 0.3);
+            align-self: flex-start;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: inherit;
+        }
+
+        .pg-btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(27, 138, 74, 0.4);
+        }
+
+        .pg-btn-generate:active {
+            transform: translateY(0);
+        }
+
+        .pg-btn-generate .icon {
+            font-size: 1.3rem;
+        }
+
+        /* ===== RESULT PANEL ===== */
+        #pg-result-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .result-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
+            text-align: center;
+            color: var(--teks-abu);
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: var(--radius);
+            min-height: 420px;
+        }
+
+        .result-placeholder .icon-empty {
+            font-size: 3.4rem;
+            margin-bottom: 14px;
+            opacity: 0.55;
+        }
+
+        .result-placeholder h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .result-placeholder p {
+            font-size: 0.85rem;
+            max-width: 320px;
+            line-height: 1.6;
+        }
+
+        .km-prompt-box {
+            border-radius: var(--radius);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        .km-prompt-box.visible {
+            display: block;
+        }
+
+        .km-prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .km-prompt-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--biru-tua);
+        }
+
+        .km-prompt-label .version {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--teks-abu);
+            background: #e2e8f0;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        .km-prompt-content {
+            padding: 20px 22px;
+            max-height: 460px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.72rem;
+            line-height: 1.65;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background: #fafcff;
+            color: #1e293b;
+        }
+
+        .km-prompt-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .km-prompt-content::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .km-prompt-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .km-prompt-content::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* ===== BOTTOM ACTION BUTTONS (Right panel) ===== */
+        .pg-bottom-actions {
+            display: none;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .pg-bottom-actions.visible {
+            display: flex;
+        }
+
+        .pg-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 22px;
+            font-size: 0.98rem;
+            font-weight: 700;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            letter-spacing: 0.3px;
+            color: #fff;
+            flex: 1 1 auto;
+            min-width: 140px;
+        }
+
+        .pg-action-btn.copy {
+            background: linear-gradient(135deg, var(--hijau-logo), var(--hijau-logo-gelap));
+            box-shadow: 0 4px 12px rgba(27, 138, 74, 0.3);
+        }
+
+        .pg-action-btn.copy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(27, 138, 74, 0.4);
+        }
+
+        .pg-action-btn.save {
+            background: linear-gradient(135deg, var(--merah-tombol), var(--merah-tombol-gelap));
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .pg-action-btn.save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(220, 38, 38, 0.4);
+        }
+
+        .pg-action-btn.berhasil {
+            background: #15803d !important;
+        }
+
+        /* ===== STATS ===== */
+        .pg-stats {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            padding: 14px 18px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .pg-stats .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            color: #475569;
+        }
+
+        .pg-stats .stat-item .number {
+            font-weight: 700;
+            color: var(--biru-tua);
+            font-size: 1.05rem;
+        }
+
+        .pg-stats .stat-item .label {
+            color: var(--teks-abu);
+        }
+
+        /* ===== FOOTER ===== */
+        .pg-app-footer {
+            margin-top: 45px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .pg-app-footer a {
+            color: var(--biru-tua);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .pg-app-footer a:hover {
+            color: #0f2a44;
+            text-decoration: underline;
+        }
+
+        /* ===== MENU TOGGLE (Mobile) ===== */
+        .menu-toggle {
+            display: none;
+            background: var(--hijau-logo);
+            color: #fff;
+            border: none;
+            font-size: 1.4rem;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        /* ===== RIWAYAT MODAL ===== */
+        .riwayat-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .riwayat-overlay.show {
+            display: flex;
+        }
+
+        .riwayat-modal {
+            background: #fff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 720px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.4s ease;
+        }
+
+        .riwayat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, var(--hijau-logo), var(--hijau-logo-gelap));
+            color: #fff;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .riwayat-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .riwayat-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            font-size: 1.3rem;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .riwayat-close:hover {
+            background: rgba(255,255,255,0.35);
+        }
+
+        .riwayat-body {
+            flex: 1;
+            padding: 20px 24px;
+            overflow-y: auto;
+        }
+
+        .riwayat-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--teks-abu);
+        }
+
+        .riwayat-empty .icon-empty {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .riwayat-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            transition: var(--transition);
+        }
+
+        .riwayat-item:hover {
+            border-color: var(--hijau-logo);
+            box-shadow: 0 4px 12px rgba(27, 138, 74, 0.1);
+        }
+
+        .riwayat-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .riwayat-item-title {
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--biru-tua);
+        }
+
+        .riwayat-item-date {
+            font-size: 0.72rem;
+            color: var(--teks-abu);
+            background: #e2e8f0;
+            padding: 2px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .riwayat-item-preview {
+            font-size: 0.8rem;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .riwayat-item-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .riwayat-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: none;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .riwayat-btn.load {
+            background: var(--biru-tua);
+            color: #fff;
+        }
+
+        .riwayat-btn.load:hover {
+            background: #0f2a44;
+        }
+
+        .riwayat-btn.delete {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .riwayat-btn.delete:hover {
+            background: #fecaca;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .pg-workspace {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .menu-toggle {
+                display: inline-block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pg-panel {
+                padding: 18px 16px;
+            }
+
+            .km-heading {
+                font-size: 1.4rem;
+            }
+
+            .pg-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pg-form-grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .pg-btn-generate {
+                align-self: stretch;
+                justify-content: center;
+            }
+
+            .pg-bottom-actions {
+                flex-direction: column;
+            }
+
+            .pg-action-btn {
+                width: 100%;
+            }
+
+            .section-card {
+                padding: 14px;
+            }
+
+            .topbar-left {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+
+            .topbar-left .topbar-identity p {
+                max-width: 100%;
+            }
+
+            .topbar-right {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+
+            .main-content {
+                padding: 12px;
+            }
+
+            .pg-panel {
+                padding: 14px 12px;
+            }
+
+            .km-prompt-content {
+                padding: 14px;
+                font-size: 0.62rem;
+                max-height: 320px;
+            }
+
+            .pg-stats {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* ===== PRINT ===== */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .pg-panel {
+                box-shadow: none;
+                padding: 20px;
+                border-radius: 0;
+            }
+
+            .pg-btn-generate,
+            .pg-action-btn {
+                display: none !important;
+            }
+
+            .km-prompt-content {
+                max-height: none;
+                overflow: visible;
+                white-space: pre-wrap;
+            }
+
+            .sidebar,
+            .topbar,
+            .menu-toggle {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+        }
+
+        .tooltip-trigger {
+            cursor: help;
+            color: var(--teks-abu);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- DASHBOARD -->
+<!-- ============================================================ -->
+<div id="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="https://grossmart.biz.id/uploads/Logo-SMK-Karya-Bangsa-removebg-preview.png" 
+                 alt="Logo SMK Karya Bangsa"
+                 onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%231b8a4a%22/><text x=%2250%22 y=%2265%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Arial%22 font-weight=%22bold%22>KB</text></svg>'">
+            <h2>SMK KARYA BANGSA</h2>
+            <p>Prompt Master Generator RPM</p>
+        </div>
+
+        <nav class="sidebar-menu">
+            <div class="menu-label">Menu Utama</div>
+            <a class="active" data-menu="generator">
+                <span class="menu-icon">🚀</span> Generator Prompt
+            </a>
+            <a data-menu="riwayat">
+                <span class="menu-icon">🕘</span> Riwayat
+            </a>
+            <a href="https://grossmart.biz.id/Converter-html-doxc" target="_blank" rel="noopener noreferrer" data-menu="converter">
+                <span class="menu-icon">🔄</span> Converter
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="avatar">G</div>
+                <div class="detail">
+                    <div class="name">Guru</div>
+                    <div class="role">SMK Karya Bangsa</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menu-toggle">☰</button>
+                <img src="https://grossmart.biz.id/uploads/Logo-SMK-Karya-Bangsa-removebg-preview.png" 
+                     alt="Logo SMK Karya Bangsa"
+                     class="topbar-logo"
+                     onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%231b8a4a%22/><text x=%2250%22 y=%2265%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Arial%22 font-weight=%22bold%22>KB</text></svg>'">
+                <div class="topbar-identity">
+                    <h1>SMK KARYA BANGSA</h1>
+                    <p>Jl. Marsekal Suryadarma No.1, RT.002/RW.002, Neglasari, Kec. Neglasari, Kota Tangerang, Banten 15129</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <span class="badge-version">V.4.0</span>
+                <span class="date-info" id="current-date"></span>
+            </div>
+        </div>
+
+        <!-- APP CONTAINER -->
+        <div id="pg-app-container">
+            
+            <h2 class="km-heading">
+                Prompt Master Generator RPM
+            </h2>
+
+            <!-- TWO-COLUMN WORKSPACE -->
+            <div class="pg-workspace">
+
+                <!-- =============================== -->
+                <!-- LEFT: FORM GENERATOR -->
+                <!-- =============================== -->
+                <div class="pg-panel">
+                    
+
+                    <form id="form-generator-master">
+                        
+                        <!-- BLOK 1 -->
+                        <h3>
+                            📋 Tahap 1: DATA IDENTITAS
+                            <span class="badge-new">WAJIB</span>
+                        </h3>
+                        <div class="pg-form-grid">
+                            <div class="pg-form-group">
+                                <label>Nama Provinsi / Kota <span class="required">*</span></label>
+                                <input type="text" id="in-provinsi" placeholder="Contoh: Banten / Kota Tangerang" value="Banten" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Nama Dinas Pendidikan <span class="required">*</span></label>
+                                <input type="text" id="in-dinas" placeholder="Contoh: Dinas Pendidikan Kota Tangerang" value="Dinas Pendidikan Kota Tangerang" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Satuan Pendidikan <span class="required">*</span></label>
+                                <input type="text" id="in-sekolah" placeholder="Contoh: SMK Karya Bangsa Kota Tangerang" value="SMK Karya Bangsa" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Alamat Sekolah <span class="required">*</span></label>
+                                <input type="text" id="in-alamat" placeholder="Contoh: Jl. Marsekal Suryadarma No.1" value="Jl. Marsekal Suryadarma No.1, RT.002/RW.002, Neglasari, Kec. Neglasari." required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Mata Pelajaran <span class="required">*</span></label>
+                                <input type="text" id="in-mapel" placeholder="Contoh: Bahasa Inggris" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Singkatan Mata Pelajaran <span class="required">*</span></label>
+                                <input type="text" id="in-singkatan" placeholder="Contoh: BING" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Fase / Kelas <span class="required">*</span></label>
+                                <input type="text" id="in-fase" placeholder="Contoh: Fase E / Kelas 10" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Tahun Pelajaran <span class="required">*</span></label>
+                                <input type="text" id="in-tapel" placeholder="Contoh: 2026/2027" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Alokasi Waktu Total <span class="required">*</span></label>
+                                <input type="text" id="in-alokasi-total" placeholder="Contoh: 144 JP / Tahun" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>JP per Minggu <span class="required">*</span></label>
+                                <input type="text" id="in-jp-minggu" placeholder="Contoh: 4 JP/Minggu" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>JP per Pertemuan <span class="required">*</span></label>
+                                <input type="text" id="in-jp-pertemuan" placeholder="Contoh: 2 JP @ 40 Menit" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Kota & Tanggal TTD <span class="required">*</span></label>
+                                <input type="text" id="in-tanggal" placeholder="Contoh: Tangerang, 10 Agustus 2026" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Nama Guru <span class="required">*</span></label>
+                                <input type="text" id="in-guru" placeholder="Contoh: Hendi Mulyadi, S.E." required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>NIP Guru <span class="optional">(opsional)</span></label>
+                                <input type="text" id="in-nipguru" placeholder="Ketik (-) jika tidak ada">
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Nama Kepala Sekolah <span class="required">*</span></label>
+                                <input type="text" id="in-kepsek" placeholder="Contoh: H. Cecep Komarudin, S.E." value="H. Cecep Komarudin, S.E" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>NIP Kepala Sekolah <span class="optional">(opsional)</span></label>
+                                <input type="text" id="in-nipkepsek" placeholder="Ketik (-) jika tidak ada">
+                            </div>
+                        </div>
+
+                        <!-- BLOK 2 -->
+                        <h3 style="margin-top:20px;">
+                            🎯 Tahap 2: ELEMEN CP
+                            <span class="badge-new">WAJIB</span>
+                        </h3>
+                        <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 10px;">
+                            Format: [Nomor] | [Kode 2-4 huruf] | [Nama Elemen Lengkap]
+                        </p>
+                        <div class="pg-form-grid" style="grid-template-columns: 1fr;">
+                            <div class="pg-form-group">
+                                <textarea id="in-elemen-kode" style="min-height: 100px; font-family: monospace; font-size: 0.82rem;" placeholder="Contoh:&#10;1 | LIST | Menyimak-Berbicara&#10;2 | READ | Membaca-Memirsa&#10;3 | WRITE | Menulis-Mempresentasikan" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- BLOK 3 -->
+                        <h3 style="margin-top:20px;">
+                            📚 Tahap 3: CAPAIAN PEMBELAJARAN
+                            <span class="badge-new">WAJIB</span>
+                        </h3>
+                        <div class="pg-form-grid" style="grid-template-columns: 1fr;">
+                            <div class="pg-form-group">
+                                <label>CP Umum / Rasional Mapel <span class="required">*</span></label>
+                                <textarea id="in-cp-umum" style="min-height: 90px; font-size: 0.82rem;" placeholder="Contoh: Bahasa Inggris adalah salah satu bahasa yang digunakan secara global..." required></textarea>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>CP Per Elemen <span class="required">*</span></label>
+                                <textarea id="in-cp-elemen" style="min-height: 150px; font-family: monospace; font-size: 0.85rem;" placeholder="Contoh:&#10;Elemen 1 - Menyimak-Berbicara (Listening-Speaking):&#10;Memahami alur informasi secara keseluruhan...&#10;&#10;Elemen 2 - Membaca-Memirsa (Reading-Viewing):&#10;Memahami alur informasi, informasi tersurat dan tersirat..." required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- BLOK 4,5,6 -->
+                        <h3 style="margin-top:20px;">
+                            ⚡ Tahap 4, 5, 6: OTOMATISASI AI
+                            <span class="badge-update">OTOMATIS</span>
+                        </h3>
+                        <p style="font-size: 0.82rem; color: #64748b;">
+                            Distribusi TP, Kalender Pendidikan, dan Rentang Nilai dibiarkan kosong agar diisi otomatis oleh AI.
+                        </p>
+
+                        <!-- BLOK 7 -->
+                        <h3 style="margin-top:20px;">
+                            📝 Tahap 7: DATA MODUL AJAR
+                            <span class="badge-new">WAJIB</span>
+                        </h3>
+                        <div class="pg-form-grid">
+                            <div class="pg-form-group">
+                                <label>Kode TP Pertama <span class="required">*</span></label>
+                                <input type="text" id="in-kode-ma" placeholder="Contoh: BING-E-READ-001" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Model Pembelajaran <span class="required">*</span></label>
+                                <input type="text" id="in-model-ma" placeholder="Contoh: Discovery Learning" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Moda Pembelajaran <span class="required">*</span></label>
+                                <input type="text" id="in-moda-ma" placeholder="Contoh: Tatap Muka" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Tema/Topik <span class="required">*</span></label>
+                                <input type="text" id="in-tema-ma" placeholder="Contoh: Narrative Text" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Produk Akhir <span class="required">*</span></label>
+                                <input type="text" id="in-produk-ma" placeholder="Contoh: Narrative Text Sederhana" required>
+                            </div>
+                            <div class="pg-form-group">
+                                <label>Sumber Belajar <span class="required">*</span></label>
+                                <input type="text" id="in-sumber-ma" placeholder="Contoh: Youtube, Website" required>
+                            </div>
+                        </div>
+
+                        <!-- BLOK 8 -->
+                        <h3 style="margin-top:20px;">
+                            📄 Tahap 8: LKPD & ASSESSMENT
+                            <span class="badge-update">BARU</span>
+                        </h3>
+                        
+                        <div class="section-card">
+                            <div class="section-title">
+                                <span class="icon">📋</span> LKPD
+                            </div>
+                            <div class="pg-form-grid pg-form-grid-2">
+                                <div class="pg-form-group">
+                                    <label>Judul LKPD <span class="required">*</span></label>
+                                    <input type="text" id="in-lkpd-judul" placeholder="Contoh: Exploring Narrative Texts" required>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Jenis LKPD <span class="required">*</span></label>
+                                    <select id="in-lkpd-jenis" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <option value="Penemuan Konsep">Penemuan Konsep</option>
+                                        <option value="Praktikum/Eksperimen">Praktikum/Eksperimen</option>
+                                        <option value="Analisis Kasus">Analisis Kasus</option>
+                                        <option value="Proyek/Kolaboratif">Proyek/Kolaboratif</option>
+                                        <option value="Reflektif">Reflektif</option>
+                                        <option value="Terintegrasi">Terintegrasi</option>
+                                    </select>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Jumlah Soal LKPD <span class="required">*</span></label>
+                                    <input type="number" id="in-lkpd-soal" placeholder="Contoh: 10" min="1" max="30" value="10" required>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Durasi Pengerjaan <span class="required">*</span></label>
+                                    <input type="text" id="in-lkpd-durasi" placeholder="Contoh: 45 Menit" value="45 Menit" required>
+                                </div>
+                                <div class="pg-form-group" style="grid-column: 1 / -1;">
+                                    <label>Instruksi Khusus <span class="optional">(opsional)</span></label>
+                                    <textarea id="in-lkpd-instruksi" style="min-height: 50px;" placeholder="Contoh: Kerjakan secara berkelompok..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-card" style="margin-top:14px;">
+                            <div class="section-title">
+                                <span class="icon">📊</span> Assessment & Evaluasi
+                            </div>
+                            <div class="pg-form-grid pg-form-grid-2">
+                                <div class="pg-form-group">
+                                    <label>Jenis Assessment <span class="required">*</span></label>
+                                    <select id="in-assessment-jenis" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <option value="Diagnostik">Diagnostik</option>
+                                        <option value="Formatif">Formatif</option>
+                                        <option value="Sumatif">Sumatif</option>
+                                        <option value="Portofolio">Portofolio</option>
+                                        <option value="Proyek">Proyek</option>
+                                        <option value="Terintegrasi">Terintegrasi</option>
+                                    </select>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Bentuk Assessment <span class="required">*</span></label>
+                                    <select id="in-assessment-bentuk" required>
+                                        <option value="">-- Pilih Bentuk --</option>
+                                        <option value="Tes Tulis">Tes Tulis</option>
+                                        <option value="Tes Lisan">Tes Lisan</option>
+                                        <option value="Praktik">Praktik</option>
+                                        <option value="Proyek">Proyek</option>
+                                        <option value="Portofolio">Portofolio</option>
+                                        <option value="Observasi">Observasi</option>
+                                        <option value="Presentasi">Presentasi</option>
+                                    </select>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Jumlah Soal <span class="required">*</span></label>
+                                    <input type="number" id="in-assessment-soal" placeholder="Contoh: 15" min="1" max="50" value="15" required>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Level Kognitif <span class="required">*</span></label>
+                                    <select id="in-assessment-level" required>
+                                        <option value="">-- Pilih Level --</option>
+                                        <option value="C1 (Mengingat)">C1 - Mengingat</option>
+                                        <option value="C2 (Memahami)">C2 - Memahami</option>
+                                        <option value="C3 (Menerapkan)">C3 - Menerapkan</option>
+                                        <option value="C4 (Menganalisis)">C4 - Menganalisis</option>
+                                        <option value="C5 (Mengevaluasi)">C5 - Mengevaluasi</option>
+                                        <option value="C6 (Mencipta)">C6 - Mencipta</option>
+                                        <option value="Campuran (C1-C6)">Campuran (C1-C6)</option>
+                                    </select>
+                                </div>
+                                <div class="pg-form-group" style="grid-column: 1 / -1;">
+                                    <label>Bobot Penilaian <span class="optional">(opsional)</span></label>
+                                    <input type="text" id="in-assessment-bobot" placeholder="Contoh: 60% Tulis, 40% Praktik" value="60% Tulis, 40% Praktik">
+                                </div>
+                                <div class="pg-form-group" style="grid-column: 1 / -1;">
+                                    <label>Rubrik Penilaian <span class="optional">(opsional)</span></label>
+                                    <textarea id="in-assessment-rubrik" style="min-height: 50px;" placeholder="Contoh: Skor 4: Sangat Baik, Skor 3: Baik..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BLOK 9 -->
+                        <h3 style="margin-top:20px;">
+                            📖 Tahap 9: BACAAN & TINDAK LANJUT
+                            <span class="badge-update">BARU</span>
+                        </h3>
+
+                        <div class="section-card">
+                            <div class="section-title">
+                                <span class="icon">📚</span> Bacaan / Referensi
+                            </div>
+                            <div class="pg-form-grid pg-form-grid-2">
+                                <div class="pg-form-group">
+                                    <label>Jenis Bacaan <span class="required">*</span></label>
+                                    <select id="in-bacaan-jenis" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <option value="Artikel">Artikel</option>
+                                        <option value="Jurnal">Jurnal</option>
+                                        <option value="Buku">Buku</option>
+                                        <option value="Modul">Modul</option>
+                                        <option value="Video Edukasi">Video Edukasi</option>
+                                        <option value="Website">Website</option>
+                                        <option value="Campuran">Campuran</option>
+                                    </select>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Jumlah Referensi <span class="required">*</span></label>
+                                    <input type="number" id="in-bacaan-jumlah" placeholder="Contoh: 5" min="1" max="20" value="5" required>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Format Referensi <span class="required">*</span></label>
+                                    <select id="in-bacaan-format" required>
+                                        <option value="APA">APA Style (7th ed)</option>
+                                        <option value="MLA">MLA Style</option>
+                                        <option value="Chicago">Chicago Style</option>
+                                        <option value="Harvard">Harvard Style</option>
+                                    </select>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Topik Khusus <span class="optional">(opsional)</span></label>
+                                    <input type="text" id="in-bacaan-topik" placeholder="Contoh: Narrative Text">
+                                </div>
+                                <div class="pg-form-group" style="grid-column: 1 / -1;">
+                                    <label>Ringkasan Bacaan <span class="optional">(opsional)</span></label>
+                                    <textarea id="in-bacaan-ringkasan" style="min-height: 50px;" placeholder="Jelaskan secara singkat..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-card" style="margin-top:14px;">
+                            <div class="section-title">
+                                <span class="icon">🔄</span> Tindak Lanjut & Pengayaan
+                            </div>
+                            <div class="pg-form-grid pg-form-grid-2">
+                                <div class="pg-form-group">
+                                    <label>Jenis Tindak Lanjut <span class="required">*</span></label>
+                                    <select id="in-tindaklanjut-jenis" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <option value="Remedial">Remedial</option>
+                                        <option value="Pengayaan">Pengayaan</option>
+                                        <option value="Remedial & Pengayaan">Remedial & Pengayaan</option>
+                                        <option value="Pendampingan">Pendampingan</option>
+                                        <option value="Proyek Mandiri">Proyek Mandiri</option>
+                                    </select>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Bentuk Tindak Lanjut <span class="required">*</span></label>
+                                    <select id="in-tindaklanjut-bentuk" required>
+                                        <option value="">-- Pilih Bentuk --</option>
+                                        <option value="Tugas Tambahan">Tugas Tambahan</option>
+                                        <option value="Bimbingan Klasikal">Bimbingan Klasikal</option>
+                                        <option value="Bimbingan Individual">Bimbingan Individual</option>
+                                        <option value="Proyek Penguatan">Proyek Penguatan</option>
+                                        <option value="Portofolio Tambahan">Portofolio Tambahan</option>
+                                        <option value="Refleksi Diri">Refleksi Diri</option>
+                                    </select>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Durasi <span class="required">*</span></label>
+                                    <input type="text" id="in-tindaklanjut-durasi" placeholder="Contoh: 2 Minggu" value="2 Minggu" required>
+                                </div>
+                                <div class="pg-form-group">
+                                    <label>Kriteria Keberhasilan <span class="required">*</span></label>
+                                    <input type="text" id="in-tindaklanjut-kriteria" placeholder="Contoh: Nilai ≥ 75" value="Nilai ≥ 75" required>
+                                </div>
+                                <div class="pg-form-group" style="grid-column: 1 / -1;">
+                                    <label>Deskripsi Tindak Lanjut <span class="required">*</span></label>
+                                    <textarea id="in-tindaklanjut-deskripsi" style="min-height: 50px;" placeholder="Jelaskan program tindak lanjut..." required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TOMBOL GENERATE -->
+                        <button type="submit" class="pg-btn-generate">
+                            <span class="icon">🚀</span>
+                            Buat Prompt
+                        </button>
+                    </form>
+                </div>
+
+                <!-- =============================== -->
+                <!-- RIGHT: RESULT PANEL -->
+                <!-- =============================== -->
+                <div class="pg-panel">
+                    <div class="pg-panel-title">
+                        <span class="panel-icon">📄</span> Hasil Prompt
+                    </div>
+
+                    <div id="pg-result-section">
+                        
+                        <!-- Placeholder sebelum generate -->
+                        <div class="result-placeholder" id="result-placeholder">
+                            <div class="icon-empty">📝</div>
+                            <h4>Belum Ada Prompt</h4>
+                            <p>Isi form di sebelah kiri, lalu klik <strong>"Buat Prompt"</strong> untuk melihat hasilnya di sini.</p>
+                        </div>
+
+                        <!-- Prompt Box -->
+                        <div class="km-prompt-box" id="km-prompt-box">
+                            <div class="km-prompt-header">
+                                <span class="km-prompt-label">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                    Prompt Kurikulum Merdeka
+                                    <span class="version">V.4.0</span>
+                                </span>
+                            </div>
+                            <div class="km-prompt-content" id="teksPromptCP"></div>
+                        </div>
+
+                        <!-- Tombol Aksi Bawah -->
+                        <div class="pg-bottom-actions" id="pg-bottom-actions" style="margin-top:16px;">
+                            <button class="pg-action-btn copy" id="btnCopyBottom" type="button">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                Copy Prompt
+                            </button>
+                            <button class="pg-action-btn save" id="btnSaveBottom" type="button">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                Save Prompt
+                            </button>
+                        </div>
+
+                        <!-- STATS -->
+                        <div class="pg-stats" id="pg-stats" style="margin-top:16px; display:none;">
+                            <div class="stat-item">
+                                <span class="number" id="stat-dokumen">7</span>
+                                <span class="label">Dokumen</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="number" id="stat-lkpd">1</span>
+                                <span class="label">LKPD</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="number" id="stat-assessment">1</span>
+                                <span class="label">Assessment</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="number" id="stat-bacaan">5</span>
+                                <span class="label">Referensi</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="number" id="stat-tindaklanjut">1</span>
+                                <span class="label">Tindak Lanjut</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div><!-- /pg-workspace -->
+
+            <!-- FOOTER -->
+            <div class="pg-app-footer" id="yefri-footer">
+                &copy; 2026 Crafted for Education by <a href="#" id="yefri-link">Perpustakaan Pendidikan</a>
+                <span style="margin:0 8px;">|</span>
+                <span style="font-size:0.8rem;">Versi 4.0</span>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- ============================================================ -->
+<!-- RIWAYAT MODAL -->
+<!-- ============================================================ -->
+<div class="riwayat-overlay" id="riwayat-overlay">
+    <div class="riwayat-modal">
+        <div class="riwayat-header">
+            <h3>🕘 Riwayat Prompt Tersimpan</h3>
+            <button class="riwayat-close" id="riwayat-close" title="Tutup">&times;</button>
+        </div>
+        <div class="riwayat-body" id="riwayat-body">
+            <!-- Konten riwayat diisi oleh JS -->
+        </div>
+    </div>
+</div>
+
+<script>
+
+    // ============================================================
+    //  DATE UPDATE
+    // ============================================================
+    function updateCurrentDate() {
+        const dateEl = document.getElementById('current-date');
+        if (dateEl) {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            dateEl.textContent = now.toLocaleDateString('id-ID', options);
+        }
+    }
+
+    // ============================================================
+    //  RIWAYAT STORAGE
+    // ============================================================
+    const RIWAYAT_KEY = 'smkkb_prompt_riwayat';
+
+    function getRiwayat() {
+        try {
+            const data = localStorage.getItem(RIWAYAT_KEY);
+            return data ? JSON.parse(data) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveRiwayat(riwayat) {
+        try {
+            localStorage.setItem(RIWAYAT_KEY, JSON.stringify(riwayat));
+        } catch (e) {
+            alert('Gagal menyimpan riwayat. Storage mungkin penuh.');
+        }
+    }
+
+    function addToRiwayat(promptText) {
+        const riwayat = getRiwayat();
+        const now = new Date();
+        
+        const mapel = document.getElementById('in-mapel').value || 'Tanpa Mapel';
+        const fase = document.getElementById('in-fase').value || '-';
+        
+        const item = {
+            id: 'prompt_' + now.getTime(),
+            tanggal: now.toISOString(),
+            judul: mapel + ' - ' + fase,
+            prompt: promptText
+        };
+        
+        riwayat.unshift(item);
+        
+        if (riwayat.length > 50) {
+            riwayat.length = 50;
+        }
+        
+        saveRiwayat(riwayat);
+        return item;
+    }
+
+    function deleteRiwayat(id) {
+        if (!confirm('Hapus prompt ini dari riwayat?')) return;
+        const riwayat = getRiwayat().filter(item => item.id !== id);
+        saveRiwayat(riwayat);
+        renderRiwayat();
+    }
+
+    function formatTanggal(isoString) {
+        const d = new Date(isoString);
+        const options = { 
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        };
+        return d.toLocaleDateString('id-ID', options);
+    }
+
+    function renderRiwayat() {
+        const body = document.getElementById('riwayat-body');
+        const riwayat = getRiwayat();
+
+        if (riwayat.length === 0) {
+            body.innerHTML = `
+                <div class="riwayat-empty">
+                    <span class="icon-empty">📭</span>
+                    <p><strong>Belum ada riwayat prompt.</strong></p>
+                    <p style="font-size:0.85rem;margin-top:6px;">Silakan buat prompt lalu klik "Save Prompt" untuk menyimpannya.</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        riwayat.forEach(item => {
+            const preview = item.prompt.substring(0, 160).replace(/\n/g, ' ') + '...';
+            html += `
+                <div class="riwayat-item">
+                    <div class="riwayat-item-header">
+                        <span class="riwayat-item-title">📄 ${escapeHtml(item.judul)}</span>
+                        <span class="riwayat-item-date">${formatTanggal(item.tanggal)}</span>
+                    </div>
+                    <div class="riwayat-item-preview">${escapeHtml(preview)}</div>
+                    <div class="riwayat-item-actions">
+                        <button class="riwayat-btn load" data-load="${item.id}">
+                            📥 Muat ke Editor
+                        </button>
+                        <button class="riwayat-btn delete" data-delete="${item.id}">
+                            🗑️ Hapus
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        body.innerHTML = html;
+
+        body.querySelectorAll('[data-load]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.load;
+                const item = getRiwayat().find(r => r.id === id);
+                if (item) {
+                    rawGeneratedPrompt = item.prompt;
+                    document.getElementById('teksPromptCP').textContent = item.prompt;
+                    document.getElementById('result-placeholder').style.display = 'none';
+                    document.getElementById('km-prompt-box').classList.add('visible');
+                    document.getElementById('pg-bottom-actions').classList.add('visible');
+                    document.getElementById('pg-stats').style.display = 'flex';
+                    closeRiwayat();
+                }
+            });
+        });
+
+        body.querySelectorAll('[data-delete]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                deleteRiwayat(this.dataset.delete);
+            });
+        });
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function openRiwayat() {
+        renderRiwayat();
+        document.getElementById('riwayat-overlay').classList.add('show');
+    }
+
+    function closeRiwayat() {
+        document.getElementById('riwayat-overlay').classList.remove('show');
+    }
+
+    document.getElementById('riwayat-close').addEventListener('click', closeRiwayat);
+    document.getElementById('riwayat-overlay').addEventListener('click', function(e) {
+        if (e.target === this) closeRiwayat();
+    });
+
+    // ============================================================
+    //  SIDEBAR MENU
+    // ============================================================
+    function initSidebarMenu() {
+        const menuLinks = document.querySelectorAll('.sidebar-menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                
+                const menu = this.dataset.menu;
+
+                // Menu Converter: biarkan default (buka tab baru via href + target="_blank")
+                if (menu === 'converter') {
+                    // Tidak preventDefault, biarkan browser membuka tab baru
+                    // Tidak mengubah active state agar menu lain tetap aktif
+                    return;
+                }
+
+                e.preventDefault();
+                menuLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
+                if (menu === 'generator') {
+                    document.getElementById('pg-app-container').scrollIntoView({ behavior: 'smooth' });
+                } else if (menu === 'riwayat') {
+                    openRiwayat();
+                }
+            });
+        });
+    }
+
+    // ============================================================
+    //  MOBILE MENU TOGGLE
+    // ============================================================
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+
+    if (menuToggle) {
+        menuToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('open');
+        });
+    }
+
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 992) {
+            if (sidebar.classList.contains('open') && 
+                !sidebar.contains(e.target) && 
+                e.target !== menuToggle &&
+                !menuToggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        }
+    });
+
+    // ============================================================
+    //  SANITASI INPUT
+    // ============================================================
+    function sanitizeText(text) {
+        if (!text) return '';
+        var textArea = document.createElement('textarea');
+        textArea.innerHTML = text;
+        return textArea.value;
+    }
+
+    // ============================================================
+    //  GENERATE PROMPT
+    // ============================================================
+    let rawGeneratedPrompt = "";
+
+    document.getElementById('form-generator-master').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const provinsi = sanitizeText(document.getElementById('in-provinsi').value);
+        const dinas = sanitizeText(document.getElementById('in-dinas').value);
+        const sekolah = sanitizeText(document.getElementById('in-sekolah').value);
+        const alamat = sanitizeText(document.getElementById('in-alamat').value);
+        const mapel = sanitizeText(document.getElementById('in-mapel').value);
+        const singkatan = sanitizeText(document.getElementById('in-singkatan').value);
+        const fase = sanitizeText(document.getElementById('in-fase').value);
+        const tapel = sanitizeText(document.getElementById('in-tapel').value);
+        const alokasiTotal = sanitizeText(document.getElementById('in-alokasi-total').value);
+        const jpMinggu = sanitizeText(document.getElementById('in-jp-minggu').value);
+        const jpPertemuan = sanitizeText(document.getElementById('in-jp-pertemuan').value);
+        const guru = sanitizeText(document.getElementById('in-guru').value);
+        const nipGuru = sanitizeText(document.getElementById('in-nipguru').value || "-");
+        const kepsek = sanitizeText(document.getElementById('in-kepsek').value);
+        const nipKepsek = sanitizeText(document.getElementById('in-nipkepsek').value || "-");
+        const tanggal = sanitizeText(document.getElementById('in-tanggal').value);
+
+        const elemenKode = sanitizeText(document.getElementById('in-elemen-kode').value);
+        const cpUmum = sanitizeText(document.getElementById('in-cp-umum').value);
+        const cpElemen = sanitizeText(document.getElementById('in-cp-elemen').value);
+        
+        const kodeMA = sanitizeText(document.getElementById('in-kode-ma').value);
+        const modelMA = sanitizeText(document.getElementById('in-model-ma').value);
+        const modaMA = sanitizeText(document.getElementById('in-moda-ma').value);
+        const temaMA = sanitizeText(document.getElementById('in-tema-ma').value);
+        const produkMA = sanitizeText(document.getElementById('in-produk-ma').value);
+        const sumberMA = sanitizeText(document.getElementById('in-sumber-ma').value);
+
+        const lkpdJudul = sanitizeText(document.getElementById('in-lkpd-judul').value);
+        const lkpdJenis = sanitizeText(document.getElementById('in-lkpd-jenis').value);
+        const lkpdSoal = sanitizeText(document.getElementById('in-lkpd-soal').value);
+        const lkpdDurasi = sanitizeText(document.getElementById('in-lkpd-durasi').value);
+        const lkpdInstruksi = sanitizeText(document.getElementById('in-lkpd-instruksi').value);
+
+        const assessmentJenis = sanitizeText(document.getElementById('in-assessment-jenis').value);
+        const assessmentBentuk = sanitizeText(document.getElementById('in-assessment-bentuk').value);
+        const assessmentSoal = sanitizeText(document.getElementById('in-assessment-soal').value);
+        const assessmentLevel = sanitizeText(document.getElementById('in-assessment-level').value);
+        const assessmentBobot = sanitizeText(document.getElementById('in-assessment-bobot').value);
+        const assessmentRubrik = sanitizeText(document.getElementById('in-assessment-rubrik').value);
+
+        const bacaanJenis = sanitizeText(document.getElementById('in-bacaan-jenis').value);
+        const bacaanJumlah = sanitizeText(document.getElementById('in-bacaan-jumlah').value);
+        const bacaanFormat = sanitizeText(document.getElementById('in-bacaan-format').value);
+        const bacaanTopik = sanitizeText(document.getElementById('in-bacaan-topik').value);
+        const bacaanRingkasan = sanitizeText(document.getElementById('in-bacaan-ringkasan').value);
+
+        const tindaklanjutJenis = sanitizeText(document.getElementById('in-tindaklanjut-jenis').value);
+        const tindaklanjutBentuk = sanitizeText(document.getElementById('in-tindaklanjut-bentuk').value);
+        const tindaklanjutDurasi = sanitizeText(document.getElementById('in-tindaklanjut-durasi').value);
+        const tindaklanjutKriteria = sanitizeText(document.getElementById('in-tindaklanjut-kriteria').value);
+        const tindaklanjutDeskripsi = sanitizeText(document.getElementById('in-tindaklanjut-deskripsi').value);
+
+        const promptTemplate = `Anda adalah ahli perangkat administrasi pembelajaran Kurikulum Merdeka Indonesia.
+
+Tugas Anda adalah membuat **PERANGKAT AJAR LENGKAP** yang terdiri dari 7 dokumen resmi + LKPD + Assessment + Bacaan + Tindak Lanjut, secara berurutan dan konsisten dalam format HTML profesional siap cetak, berdasarkan data yang saya berikan di bawah ini.
+
+Setiap dokumen harus:
+- Konsisten satu sama lain (data, kode, nama, JP tidak boleh berbeda antar dokumen)
+- Menggunakan kop sekolah, palet warna, dan tipografi yang identik
+- Siap dicetak sebagai dokumen A4 resmi
+- Menggunakan Bahasa Indonesia baku dan formal
+
+---
+
+## ==============================
+##   [INPUT WAJIB - ISI SEMUA]
+## ==============================
+
+### --- BLOK 1: DATA IDENTITAS ---
+
+- Nama Provinsi / Kota          : ${provinsi}
+- Nama Dinas Pendidikan         : ${dinas}
+- Satuan Pendidikan             : ${sekolah}
+- Alamat Sekolah                : ${alamat}
+- Mata Pelajaran                : ${mapel}
+- Singkatan Mata Pelajaran      : ${singkatan}
+- Fase / Kelas                  : ${fase}
+- Tahun Pelajaran               : ${tapel}
+- Alokasi Waktu Total           : ${alokasiTotal}
+- JP per Minggu                 : ${jpMinggu}
+- JP per Pertemuan (Modul Ajar) : ${jpPertemuan}
+- Nama Guru                     : ${guru}
+- NIP Guru                      : ${nipGuru}
+- Nama Kepala Sekolah           : ${kepsek}
+- NIP Kepala Sekolah            : ${nipKepsek}
+- Kota & Tanggal TTD            : ${tanggal}
+
+### --- BLOK 2: ELEMEN CP & KODE ELEMEN ---
+
+${elemenKode}
+
+### --- BLOK 3: CAPAIAN PEMBELAJARAN ---
+
+**CP Umum / Rasional Mata Pelajaran:**
+${cpUmum}
+
+**CP Per Elemen:**
+${cpElemen}
+
+### --- BLOK 4: DISTRIBUSI TP (OPSIONAL) ---
+
+[AI: Tentukan jumlah TP dan alokasi JP secara proporsional. Tentukan juga pembagian semester 1 dan 2 secara merata]
+
+### --- BLOK 5: KALENDER PENDIDIKAN ---
+
+[AI: Buatkan kalender pendidikan dan distribusi minggu efektif secara otomatis untuk Semester 1 dan 2 (total 12 bulan) berdasarkan standar kalender pendidikan nasional untuk tahun ajaran ini. Tentukan jumlah minggu kalender, minggu tidak efektif, dan minggu efektif per bulan, beserta keterangan kegiatannya (MPLS, PTS, PAS, Libur). Gunakan data otomatis ini secara KONSISTEN di Dokumen 4 dan 5.]
+
+### --- BLOK 6: RENTANG NILAI KKTP ---
+
+Level 1 - Mulai Berkembang : 0 - 55   | Predikat D
+Level 2 - Layak (v) KKTP   : 56 - 70  | Predikat C
+Level 3 - Cakap            : 71 - 85  | Predikat B
+Level 4 - Mahir            : 86 - 100 | Predikat A
+
+### --- BLOK 7: DATA MODUL AJAR (untuk TP Pertama) ---
+
+- Kode TP yang dibuat Modul Ajarnya : ${kodeMA}
+- Model Pembelajaran                 : ${modelMA}
+- Moda Pembelajaran                  : ${modaMA}
+- Tema/Topik Pembelajaran            : ${temaMA}
+- Produk/Proyek Akhir TP             : ${produkMA}
+- Sumber Belajar Utama               : ${sumberMA}
+
+### --- BLOK 8: DATA LKPD & ASSESSMENT ---
+
+**LKPD (Lembar Kerja Peserta Didik):**
+- Judul LKPD              : ${lkpdJudul}
+- Jenis LKPD              : ${lkpdJenis}
+- Jumlah Soal/Indikator   : ${lkpdSoal} soal
+- Durasi Pengerjaan       : ${lkpdDurasi}
+- Instruksi Khusus        : ${lkpdInstruksi || "Tidak ada instruksi khusus"}
+
+**Assessment & Evaluasi:**
+- Jenis Assessment        : ${assessmentJenis}
+- Bentuk Assessment       : ${assessmentBentuk}
+- Jumlah Soal             : ${assessmentSoal} soal
+- Level Kognitif          : ${assessmentLevel}
+- Bobot Penilaian         : ${assessmentBobot || "Sesuai standar"}
+- Rubrik Spesifik         : ${assessmentRubrik || "Menggunakan rubrik standar"}
+
+### --- BLOK 9: DATA BACAAN & TINDAK LANJUT ---
+
+**Bacaan / Referensi:**
+- Jenis Bacaan            : ${bacaanJenis}
+- Jumlah Referensi        : ${bacaanJumlah} referensi
+- Format Penulisan        : ${bacaanFormat}
+- Topik Khusus            : ${bacaanTopik || "Sesuai tema pembelajaran"}
+- Ringkasan Bacaan        : ${bacaanRingkasan || "Disesuaikan dengan materi"}
+
+**Tindak Lanjut & Pengayaan:**
+- Jenis Tindak Lanjut     : ${tindaklanjutJenis}
+- Bentuk Tindak Lanjut    : ${tindaklanjutBentuk}
+- Durasi                  : ${tindaklanjutDurasi}
+- Kriteria Keberhasilan   : ${tindaklanjutKriteria}
+- Deskripsi Program       : ${tindaklanjutDeskripsi}
+
+---
+
+## ========================================
+##   [INSTRUKSI PEMBUATAN - BACA SEMUA]
+## ========================================
+
+Buat SEMUA komponen berikut secara BERURUTAN. Setiap komponen selesai,
+lanjutkan ke komponen berikutnya secara otomatis.
+Data yang dihasilkan di komponen sebelumnya HARUS digunakan secara konsisten
+di komponen berikutnya - jangan ada inkonsistensi.
+
+---
+
+## ========================================
+## DOKUMEN 1 - ANALISIS CAPAIAN PEMBELAJARAN (CP)
+## Kode: ADM-CP-${singkatan}-${fase.replace(/\s/g, '')}
+## ========================================
+
+Hasilkan dokumen Analisis CP dengan struktur 7 bagian berikut:
+
+**[A] IDENTITAS**
+Tabel dua kolom: Satuan Pendidikan, Mata Pelajaran, Fase/Kelas,
+Tahun Pelajaran, Nama Guru, NIP/NUPTK.
+
+**[B] RASIONAL MATA PELAJARAN**
+Tabel 3 kolom (No | Uraian | Deskripsi), 3 baris:
+1. Pentingnya Mapel - diturunkan dari CP Umum, 3-5 kalimat, kaitkan dengan
+   literasi, karakter, dan relevansi kehidupan nyata peserta didik.
+2. Kaitan dengan 8 Dimensi Profil Lulusan - jelaskan kontribusi mapel pada
+   kedelapan dimensi profil lulusan, 2-3 kalimat menyeluruh.
+3. Orientasi Pembelajaran - pendekatan/model/strategi yang sesuai fase ini,
+   2-3 kalimat (genre, proyek, konteks nyata, multimodal, kolaboratif).
+
+**[C] TUJUAN MATA PELAJARAN**
+Tabel 3 kolom (No | Tujuan | Indikator Umum), minimal 3 baris.
+Diturunkan dari CP Umum. KKO terukur. Indikator operasional.
+
+**[D] KARAKTERISTIK MATA PELAJARAN & ELEMEN CP**
+Tabel 4 kolom (No | Elemen | Deskripsi Elemen | Cakupan Konten Utama).
+Satu baris per elemen. Deskripsi 2-3 kalimat. Cakupan konten: 5-7 topik
+konkret dipisah titik koma.
+
+**[E] CAPAIAN PEMBELAJARAN FASE**
+Tabel 4 kolom (Fase | Capaian Pembelajaran | Kompetensi Kunci | Konten/Materi Pokok).
+CP: narasi 3-5 kalimat merangkum semua elemen.
+Kompetensi Kunci: bullet 5-7 poin.
+Konten/Materi Pokok: bullet 6-8 materi.
+
+**[F] PENJABARAN KKO PER ELEMEN**
+Tabel 3 kolom (No | Elemen | KKO & Arah TP).
+Per elemen: 3 KKO berjenjang (C2 -> C4/C5) + paragraf "Arah TP:" 2 kalimat
+yang menjelaskan implementasi konkret.
+
+**[G] KETERKAITAN 8 DIMENSI PROFIL LULUSAN**
+Tabel 4 kolom (No | Dimensi | Elemen Terkait | Relevansi [v]).
+8 baris, semua diberi [v]. Petakan elemen yang paling relevan per dimensi.
+
+**[Penutup]** Kota/tanggal, TTD Kepsek (kiri) & Guru (kanan).
+
+---
+
+## ========================================
+## DOKUMEN 2 - TUJUAN PEMBELAJARAN (TP)
+## Kode: ADM-TP-${singkatan}-${fase.replace(/\s/g, '')}
+## ========================================
+
+Hasilkan dokumen TP dengan struktur 4 bagian:
+
+**[A] IDENTITAS**
+Tabel dua kolom: Satuan Pendidikan, Mata Pelajaran, Fase/Kelas,
+Tahun Pelajaran, Alokasi Waktu Total, Nama Guru.
+
+**[B] PANDUAN KODE TP**
+Kotak format kode: [SINGKATAN_MAPEL]-[FASE]-[KODE_ELEMEN]-[NOMOR]
+Contoh nyata sesuai mapel.
+Tabel kode elemen: No | Kode Elemen | Nama Elemen Lengkap.
+
+**[C] DAFTAR TUJUAN PEMBELAJARAN**
+Tabel 6 kolom: No | Kode TP | Elemen CP | Tujuan Pembelajaran |
+Aspek Kompetensi | Alokasi JP.
+
+Ketentuan wajib:
+- Kelompokkan per elemen dengan baris header biru tua: "Elemen [N] - [Nama]"
+- Kode TP format: ${singkatan}-[FASE]-[KODE_ELEMEN]-[NOMOR 3 DIGIT]
+- Setiap TP dimulai "Peserta didik mampu..."
+- KKO berjenjang C2 -> C3 -> C4/C5 dalam setiap elemen
+- Aspek Kompetensi: kombinasi Pengetahuan / Keterampilan / Sikap
+- Total JP semua TP = Alokasi Waktu Total
+- Distribusi JP proporsional antar elemen
+
+**[D] REKAPITULASI ALOKASI WAKTU PER ELEMEN**
+Tabel 5 kolom: No | Elemen CP | Jumlah TP | Total JP | Persentase.
+Baris TOTAL: biru tua, teks putih.
+Persentase dihitung 2 desimal. Total = 100%.
+
+**[Penutup]** TTD.
+
+---
+
+## ========================================
+## DOKUMEN 3 - ALUR TUJUAN PEMBELAJARAN (ATP)
+## Kode: ADM-ATP-${singkatan}-${fase.replace(/\s/g, '')}
+## Orientasi: A4 Landscape
+## ========================================
+
+Hasilkan dokumen ATP dengan struktur 4 bagian:
+
+**[A] IDENTITAS**
+Tabel 6 kolom (3 pasang label-isi): Satuan Pendidikan | Fase/Kelas |
+Mata Pelajaran | Tahun Pelajaran | Nama Guru | Alokasi Waktu Total.
+
+**[B] DIAGRAM ALUR TP**
+Kotak berlabel "Alur Pembelajaran (Berurutan & Berkesinambungan)".
+Tampilkan semua kode TP dalam kotak-kotak yang dihubungkan tanda -> :
+- TP pertama setiap fase: border hitam tebal (TP pembuka/fondasi)
+- TP lainnya: border biru tua tipis
+- Maksimal 5-6 kode per baris, wrap ke baris berikutnya
+- Keterangan legenda di bawah diagram
+
+**[C] TABEL ALUR TUJUAN PEMBELAJARAN**
+Tabel 9 kolom:
+No | Kode TP | Elemen CP | Tujuan Pembelajaran | Materi Pokok |
+Kompetensi & Variasi | 8 Dimensi Profil Lulusan | Alokasi JP | Semester
+
+Ketentuan per kolom:
+- Kode TP & Tujuan: identik dengan Dokumen 2 (tidak boleh diubah)
+- Materi Pokok: 3-5 topik spesifik dan konkret per TP, dipisah koma
+- Kompetensi & Variasi: "[KKO utama dari TP] ([Level Bloom C1-C6])"
+- 8 Dimensi: pilih 2-4 dimensi paling relevan (bukan semua 8)
+- Semester: 1 atau 2, sesuai pembagian di Blok 4
+
+Kelompokkan per elemen dengan baris header biru tua.
+
+**[D] REKAPITULASI ALOKASI WAKTU**
+Tabel 6 kolom: No | Elemen CP | Jumlah TP | JP Sem.1 | JP Sem.2 |
+Total JP | Keterangan.
+Keterangan: fokus utama pembelajaran elemen tersebut (1 kalimat).
+Baris TOTAL: semua kolom dijumlahkan, label "1 Tahun Pelajaran".
+
+**[Penutup]** TTD.
+
+---
+
+## ========================================
+## DOKUMEN 4 - PROGRAM TAHUNAN (PROTA)
+## Kode: ADM-PROTA-${singkatan}-${fase.replace(/\s/g, '')}
+## Orientasi: A4 Portrait
+## ========================================
+
+Hasilkan dokumen Prota dengan struktur 3 bagian:
+
+**[A] IDENTITAS**
+Tabel dua kolom: Satuan Pendidikan, Mata Pelajaran, Fase/Kelas,
+Tahun Pelajaran, Alokasi Waktu ([total JP] ([JP/Minggu] JP/Minggu)),
+Nama Guru.
+
+**[B] DISTRIBUSI MINGGU EFEKTIF - KALENDER PENDIDIKAN**
+Tabel 7 kolom: Sem. | Bulan | Minggu Kalender | Tdk Efektif |
+Efektif | JP (x${jpMinggu.replace(/[^0-9]/g, '')}) | Keterangan.
+
+Hitung otomatis dari Blok 5:
+- Minggu Efektif = Minggu Kalender - Tdk Efektif
+- JP = Minggu Efektif x JP per Minggu
+- Gunakan rowspan pada kolom Sem. (semester 1 satu baris, semester 2 satu baris)
+
+Baris Subtotal per semester:
+- Label + total tiap kolom
+- Keterangan: "Terdiri dari [X] JP TP + [Y] JP Cadangan"
+  [JP Cadangan = Total JP Kalender - Total JP TP semester tersebut]
+
+Baris TOTAL KESELURUHAN:
+- Background biru tua, teks putih
+- Keterangan: "Total JP Efektif mencakup [X] JP ATP + [Y] JP Jam Cadangan"
+
+Kotak Dasar Hukum di bawah tabel:
+"Pembagian JP disesuaikan dengan distribusi materi pada elemen Kurikulum Merdeka."
+
+**[C] RENCANA PROGRAM TAHUNAN**
+Tabel 5 kolom: No | Kode TP | Tujuan Pembelajaran & Materi Pokok |
+Elemen CP | Alokasi JP | Semester.
+
+Struktur:
+- Header Semester: "SEMESTER [N] - [Ganjil/Genap] | [X] JP"
+  background abu-abu muda, border kiri 4px biru tua
+- Sub-header Elemen: "Elemen: [Nama Elemen]"
+  italic, background sangat muda, di dalam kelompok semester
+- Baris TP: Kode TP (monospace) | Rumusan singkat TP (bold) + Materi Pokok
+  (normal, italic, baris kedua dalam sel yang sama) | Elemen | JP | Semester
+- Baris CADANGAN: "-" | "CADANGAN" | "Jam cadangan untuk remedial,
+  pengayaan, atau kendala teknis kalender." | "-" | [total cadangan] JP | "1 & 2"
+  background kuning muda
+- Baris TOTAL KESELURUHAN: colspan 4 biru tua + total JP + jumlah Semester
+
+**[Penutup]** TTD.
+
+---
+
+## ========================================
+## DOKUMEN 5 - PROGRAM SEMESTER (PROSEM)
+## [Buat DUA dokumen: Semester 1 & Semester 2]
+## Kode: ADM-PROSEM-${singkatan}-${fase.replace(/\s/g, '')}-S1 / S2
+## Orientasi: A4 Landscape
+## ========================================
+
+Buat dua dokumen Prosem secara berurutan (Sem.1 dulu, lalu Sem.2).
+
+Untuk SETIAP Prosem, hasilkan:
+
+**[Header Identitas]**
+Blok teks dua kolom (bukan tabel):
+Kiri: Satuan Pendidikan | Mata Pelajaran | Nama Guru
+Kanan: Fase/Kelas | Tahun Pelajaran | Periode Semester
+
+**[Legenda Warna]**
+Kotak-kotak warna kecil beserta keterangannya:
+[*] Biru #d0e4f7 = JP Aktif Pembelajaran
+[*] Merah #ffd6d6 = Libur Nasional / Sekolah
+[*] Kuning #fff3cd = PTS
+[*] Hijau #d4edda = PAS/PAT
+[*] Abu #f0f0f0 = Tidak Efektif / Belum Dialokasikan
+
+**[Tabel Matriks Utama]**
+Kolom tetap (kiri): No | Kode TP | Tujuan Pembelajaran & Materi Pokok | JP
+Kolom minggu (kanan): satu kolom per minggu kalender, dikelompokkan per bulan
+  - Header atas: Nama Bulan (colspan = jumlah minggu bulan itu)
+  - Header bawah: M1, M2, M3, M4, (M5)
+Kolom Keterangan (paling kanan): model/metode pembelajaran + deskripsi singkat
+
+Aturan pengisian sel matriks:
+- Minggu efektif yang dipakai TP: angka JP - background biru #d0e4f7
+- Minggu libur/tidak efektif: nama singkat kegiatan - background merah #ffd6d6
+- Minggu PTS: "PTS" - background kuning #fff3cd
+- Minggu PAS/PAT: "PAS"/"PAT" - background hijau #d4edda
+- Minggu efektif belum dialokasikan: "-" - background abu #f0f0f0
+
+Algoritma distribusi JP ke minggu:
+1. Urutkan minggu efektif bulan per bulan
+2. Distribusikan JP setiap TP secara berurutan ke minggu efektif
+3. Satu TP selesai dulu sebelum TP berikutnya mulai
+4. Jika JP TP tidak habis tepat di akhir minggu, bagi ke minggu
+   berikutnya (transisi wajar)
+5. Tandai SEMUA baris TP pada minggu tidak efektif / PTS / PAS
+   dengan warna yang sesuai (bukan hanya satu baris)
+
+Baris sub-header elemen: background biru tua, teks putih, colspan penuh.
+Baris asesmen (PTS/PAS): No="-" | Kode="ASESMEN" | Tujuan="[Nama Asesmen]"
+background sesuai warna asesmen.
+
+**[Keterangan Bawah Tabel]**
+Bullet list alasan setiap periode tidak efektif:
+"- [Bulan] - [Alasan] ([N] minggu tidak efektif dari [total] minggu kalender)"
+Catatan akhir: "Catatan Semester [N]: Distribusi pembelajaran disusun berurutan
+sesuai TP dan mempertimbangkan minggu tidak efektif, asesmen semester,
+serta jadwal ${jpMinggu}."
+
+**[Penutup]** TTD.
+
+---
+
+## ========================================
+## DOKUMEN 6 - KKTP
+## Kode: ADM-KKTP-${singkatan}-${fase.replace(/\s/g, '')}
+## Orientasi: A4 Landscape
+## ========================================
+
+Hasilkan dokumen KKTP dengan struktur 3 bagian:
+
+**[Kotak Dasar Hukum]**
+Background kuning sangat muda, border kiri kuning emas:
+"Dasar: Permendikbudristek No. 21 Tahun 2022 tentang Standar Penilaian
+Pendidikan. KKTP adalah kriteria ketercapaian tujuan pembelajaran sebagai
+sumber informasi bagi guru untuk menentukan tindak lanjut. Level Layak
+adalah ambang batas KKTP; peserta didik di level Mulai Berkembang wajib
+mengikuti remedial."
+
+**[A] IDENTITAS**
+Tabel 4 kolom (2 pasang label-isi): Satuan Pendidikan | Fase/Kelas |
+Mata Pelajaran | Tahun Pelajaran | Nama Guru (colspan).
+
+**[A] DESKRIPSI LEVEL CAPAIAN**
+Tabel 6 kolom: Level | Skor | Deskripsi Umum | Tindak Lanjut |
+Rentang Nilai | Predikat.
+4 baris sesuai Blok 6. Warna baris: merah muda (MB) | putih (Layak) |
+biru muda (Cakap) | hijau muda (Mahir).
+Badge "(v) KKTP" hijau pada baris Level 2.
+
+**[B] RUBRIK KKTP PER TP**
+Untuk setiap TP (dari Dokumen 2), buat tabel 9 kolom:
+No | Kode TP | Tujuan Pembelajaran | IKTP |
+Mulai Berkembang (1) | Layak (2) (v) KKTP | Cakap (3) | Mahir (4)
+
+Kelompokkan per elemen dengan header biru tua.
+
+IKTP (Indikator Ketercapaian): hasilkan otomatis per TP:
+- Spesifik, terukur, menunjukkan bukti konkret ketercapaian
+- Format: "[KKO spesifik] + [objek/produk konkret] + [standar/konteks]"
+
+Deskriptor 4 level: hasilkan otomatis per TP:
+- MB (1): "Baru mencoba [aktivitas] namun [kelemahan spesifik]."
+- Layak (2): "Mampu [aktivitas] dengan [batasan minimal yang diterima]."
+- Cakap (3): "Mampu [aktivitas] secara mandiri dengan [bukti kualitas]."
+- Mahir (4): "Mampu [aktivitas lebih kompleks] serta [keunggulan tambahan]."
+Warna sub-kolom: merah/hijau/biru/ungu (header) dan muda-muda (sel).
+
+**[C] CATATAN PENTING**
+"Interval nilai [angka Layak] (Layak) ditetapkan sebagai ambang batas
+minimal ketuntasan peserta didik."
+
+**[Penutup]** TTD.
+
+---
+
+## ========================================
+## DOKUMEN 7 - MODUL AJAR / PERENCANAAN PEMBELAJARAN
+## [Untuk TP yang ditentukan di Blok 7]
+## Kode: ADM-MA-${singkatan}-${fase.replace(/\s/g, '')}
+## Orientasi: A4 Portrait
+## ========================================
+
+Hasilkan Modul Ajar lengkap dengan 3 Bagian Utama:
+
+### > BAGIAN A - INFORMASI UMUM
+
+**[A.1] Identitas Modul**
+Tabel dua kolom: Nama Penyusun, Satuan Pendidikan, Mata Pelajaran,
+Fase/Kelas, Kode & Judul TP, Elemen CP, Alokasi Waktu
+([N] Pertemuan x [JP] JP ([Total JP] JP @ 45 menit)),
+Model Pembelajaran, Moda Pembelajaran, Tahun Pelajaran.
+
+**[A.2] Identifikasi Kesiapan Peserta Didik**
+Kotak teks 3-4 kalimat: pengetahuan awal prasyarat peserta didik
+sesuai elemen CP dan jenjang. Kaitkan dengan pengalaman sehari-hari.
+
+**[A.3] Karakteristik Materi Pelajaran**
+Kotak teks 2-3 kalimat: jenis materi, tingkat kesulitan,
+relevansi nyata kaitkan dengan tema "${temaMA}".
+
+**[A.4] Tujuan Pembelajaran**
+Kotak berlabel "1. Tujuan Pembelajaran":
+Rumusan TP dengan KKO di-bold + konteks pencapaian melalui
+tema/proyek "${produkMA}".
+
+**[A.5] Kompetensi Awal (Prasyarat)**
+Tabel 3 kolom: No | Kompetensi Prasyarat | Cara Mengecek.
+3 baris. Cara Mengecek: teknik observasi/tes singkat yang konkret.
+
+**[A.6] 8 Dimensi Profil Lulusan**
+Tabel 3 kolom: No | Dimensi | Deskripsi Perwujudan dalam Pembelajaran.
+3-4 dimensi paling relevan. Deskripsi konkret 1-2 kalimat per dimensi.
+
+**[A.7] Sarana & Prasarana**
+Tabel 3 kolom: Kategori | Rincian | Keterangan.
+4 kategori: Teknologi Digital, Media Pembelajaran, Sumber Belajar,
+Ruang Belajar. Sesuaikan dengan model "${modelMA}" dan tema "${temaMA}".
+
+**[A.8] Target Peserta Didik & Diferensiasi**
+Tabel 3 kolom berdampingan:
+Reguler/Tipikal | Kesulitan Belajar | Berbakat/Cepat.
+Per kolom: Sasaran + Perlakuan (diferensiasi konten/proses/produk).
+
+### > BAGIAN B - KOMPONEN INTI
+
+**[B.1] Pemahaman Bermakna**
+Kotak berlabel "INTI PEMAHAMAN YANG INGIN DIBANGUN":
+Paragraf 4-6 kalimat inspiratif tentang makna mendalam TP ini
+dalam kehidupan nyata. Kaitkan dengan tema "${temaMA}".
+Tulis dengan bahasa yang memotivasi peserta didik.
+
+**[B.2] Pertanyaan Pemantik**
+Tabel 2 kolom: No | Pertanyaan Pemantik | Tujuan Pertanyaan.
+3 baris. Variasikan tipe: pengalaman / masalah / konsep.
+Tidak bisa dijawab ya/tidak. Relevan dengan tema "${temaMA}".
+
+**[B.3] Asesmen Diagnostik**
+Sub-bagian 3a - Non-Kognitif:
+Tabel 2 kolom: No | Pertanyaan Refleksi | Tujuan Diagnostik.
+3 baris (kesiapan emosional, minat belajar, hambatan belajar).
+
+Sub-bagian 3b - Kognitif:
+Tabel 3 kolom: No | Indikator | Bentuk Soal | Tindak Lanjut.
+3 baris sesuai kompetensi prasyarat dari A.5.
+
+Contoh Soal Diagnostik:
+5 soal dalam kotak (2 pilihan ganda, 1 isian singkat, 2 terbuka).
+Relevan dengan materi prasyarat dan tema "${temaMA}".
+
+**[B.4] Kegiatan Pembelajaran**
+
+Hitung jumlah pertemuan: ceil([Alokasi JP TP] / [JP per Pertemuan])
+Pilih sintak sesuai model pembelajaran "${modelMA}".
+
+Untuk SETIAP PERTEMUAN buat struktur lengkap:
+
+[Header Pertemuan]
+"PERTEMUAN [N] - [Judul Tema Menarik]"
+"Alokasi: [JP] JP ([Menit] menit) | Sintak: [Sintak yang dicakup]"
+"Fokus: [1 kalimat fokus kegiatan]"
+
+[Tujuan Pertemuan: 3 poin - Pengetahuan, Keterampilan, Sikap]
+
+[PEMBUKA - 15 menit]
+Prinsip: [nama prinsip]
+Tabel 4 kolom: No | Aktivitas Guru | No | Aktivitas Siswa
+5 baris sinkron: salam+doa, presensi, apersepsi, tujuan, pemantik.
+
+[INTI - per sintak]
+Untuk setiap sintak yang dicakup pertemuan ini:
+Header sintak biru tua: "SINTAK [N] | [Nama Sintak]" + menit
+Prinsip: [nama prinsip]
+Tabel 4 kolom aktivitas guru-siswa, 5 baris konkret dan sinkron.
+Aktivitas HARUS mencerminkan sintak tersebut (bukan generik).
+
+[PENUTUP - 15 menit]
+Prinsip: Reflecting
+Tabel 4 kolom, 5 baris: simpulan, refleksi, apresiasi, tindak lanjut, doa.
+
+**[B.5] Asesmen Formatif**
+Tabel instrumen: No | Teknik | Instrumen | Waktu | Aspek Dinilai.
+3 baris: Observasi Diskusi, Peer Review, Catatan Anekdot.
+
+5 Contoh Soal Formatif dalam kotak:
+Variasi: analisis visual, diskusi kelompok, lisan, proyek, refleksi.
+Tandai bentuk setiap soal.
+
+**[B.6] Asesmen Sumatif**
+Tabel: No | Komponen | Deskripsi Tugas | Bobot | Acuan KKTP.
+2 baris: Produk/Laporan (60%) + Presentasi/Gelar Karya (40%).
+Acuan KKTP: ringkasan dari IKTP yang dihasilkan di Dokumen 6.
+
+**[B.7] Pengayaan & Remedial**
+Tabel 3 kolom: Remedial | Reguler | Pengayaan.
+Per kolom: Sasaran + Kegiatan (2-3 aktivitas) + Waktu.
+
+**[B.8] Refleksi Guru & Peserta Didik**
+Dua kolom berdampingan:
+Kiri - Refleksi Guru (4 pertanyaan evaluasi pembelajaran).
+Kanan - Refleksi Peserta Didik (4 pertanyaan refleksi diri).
+
+### > BAGIAN C - LAMPIRAN
+
+**[Lampiran 1] LKPD (Lembar Kerja Peserta Didik)**
+
+Buat LKPD lengkap berdasarkan data Blok 8:
+
+Header: "LEMBAR KERJA PESERTA DIDIK (LKPD)" 
+Sub-judul: "${lkpdJudul}"
+Jenis: ${lkpdJenis} | Durasi: ${lkpdDurasi}
+
+**Identitas:**
+Nama: ________ | Kelas: ________ | Tanggal: ________
+
+**Petunjuk Pengerjaan:**
+${lkpdInstruksi || "1. Bacalah setiap soal dengan teliti.\n2. Kerjakan secara individu/kelompok.\n3. Tanyakan jika ada yang kurang jelas.\n4. Kumpulkan tepat waktu."}
+
+**A. Stimulus / Bacaan Awal:**
+Buat teks bacaan singkat yang relevan dengan tema "${temaMA}" (3-4 paragraf).
+
+**B. Pertanyaan / Tugas:**
+
+Buat ${lkpdSoal} pertanyaan/tugas dengan variasi:
+- 3 soal pemahaman (C1-C2)
+- 3 soal aplikasi (C3)
+- 2 soal analisis (C4)
+- 2 soal evaluasi/refleksi (C5-C6)
+
+**C. Rubrik Penilaian LKPD:**
+${assessmentRubrik || "Tabel rubrik dengan 4 level pencapaian"}
+
+**[Lampiran 2] Assessment / Evaluasi**
+
+Buat assessment lengkap berdasarkan data Blok 8:
+
+Jenis: ${assessmentJenis}
+Bentuk: ${assessmentBentuk}
+Level Kognitif: ${assessmentLevel}
+Jumlah Soal: ${assessmentSoal} soal
+Bobot: ${assessmentBobot}
+
+**Soal Assessment:**
+
+Buat ${assessmentSoal} soal dengan variasi:
+- 20% soal C1 (Mengingat)
+- 20% soal C2 (Memahami)
+- 25% soal C3 (Menerapkan)
+- 20% soal C4 (Menganalisis)
+- 10% soal C5 (Mengevaluasi)
+- 5% soal C6 (Mencipta)
+
+**Kunci Jawaban:** Berikan kunci jawaban lengkap.
+
+**Rubrik Penilaian:**
+${assessmentRubrik || "Buat rubrik penilaian dengan 4 level pencapaian (Sangat Baik, Baik, Cukup, Perlu Bimbingan)"}
+
+**[Lampiran 3] Bacaan / Referensi**
+
+Buat daftar bacaan/referensi berdasarkan data Blok 9:
+
+Jenis Bacaan: ${bacaanJenis}
+Jumlah Referensi: ${bacaanJumlah} referensi
+Format: ${bacaanFormat}
+Topik: ${bacaanTopik || temaMA}
+
+**Daftar Referensi:**
+
+Buat ${bacaanJumlah} referensi dengan format ${bacaanFormat} yang mencakup:
+1. Sumber utama (buku/modul resmi)
+2. Jurnal/artikel akademik
+3. Sumber digital/website
+4. Video/audio edukasi (jika relevan)
+5. Sumber tambahan lainnya
+
+**Ringkasan Bacaan:**
+${bacaanRingkasan || "Buat ringkasan singkat dari setiap referensi (2-3 kalimat)"}
+
+**[Lampiran 4] Tindak Lanjut & Pengayaan**
+
+Buat program tindak lanjut berdasarkan data Blok 9:
+
+Jenis: ${tindaklanjutJenis}
+Bentuk: ${tindaklanjutBentuk}
+Durasi: ${tindaklanjutDurasi}
+Kriteria Keberhasilan: ${tindaklanjutKriteria}
+
+**A. Remedial (bagi peserta didik yang belum mencapai KKTP):**
+
+${tindaklanjutJenis.includes('Remedial') ? tindaklanjutDeskripsi : 'Program remedial untuk peserta didik dengan nilai di bawah KKTP.'}
+
+- Bentuk: ${tindaklanjutBentuk}
+- Durasi: ${tindaklanjutDurasi}
+- Kriteria Tuntas: ${tindaklanjutKriteria}
+
+**B. Pengayaan (bagi peserta didik yang sudah mencapai KKTP):**
+
+${tindaklanjutJenis.includes('Pengayaan') ? 'Program pengayaan untuk peserta didik yang sudah mencapai KKTP.' : 'Tersedia program pengayaan bagi yang ingin mendalami materi.'}
+
+**C. Monitoring & Evaluasi:**
+
+Buat instrumen monitoring dan evaluasi tindak lanjut.
+
+**[Lampiran 5] Glosarium**
+3-5 istilah kunci + definisi mudah dipahami peserta didik.
+
+**[Lampiran 6] Daftar Pustaka**
+Gabungan dari referensi di Lampiran 3 dengan format yang konsisten.
+
+**[Penutup]** TTD.
+
+---
+
+## ========================================
+##   KETENTUAN DESAIN HTML (SEMUA DOK)
+## ========================================
+
+Terapkan ketentuan desain berikut SECARA KONSISTEN pada semua 7 dokumen + LKPD + Assessment:
+
+**KOP SEKOLAH (wajib di setiap dokumen):**
+Tampilkan di bagian atas: logo placeholder (lingkaran abu-abu 60px) |
+Teks kop: "PEMERINTAH ${provinsi.toUpperCase()}" (baris 1) |
+"DINAS ${dinas.toUpperCase()}" (baris 2, bold) | "${sekolah.toUpperCase()}" (baris 3, bold besar) |
+"${alamat}" (baris 4, italic kecil). Diakhiri garis horizontal.
+
+**NOMOR DOKUMEN:**
+Kanan atas setiap halaman. Format:
+"No. Dok: [KODE DOKUMEN] / Rev: 00 / Tgl: ${tapel}"
+
+**JUDUL DOKUMEN:**
+Terpusat. Nama dokumen bold besar. Subjudul lebih kecil.
+
+**PALET WARNA (gunakan variabel CSS):**
+\`\`\`css
+:root {
+  --biru-tua: #1a3a5c;
+  --biru-muda: #d0e4f7;
+  --biru-sangat-muda: #f0f5fa;
+  --biru-medium: #e8edf2;
+  --abu-label: #f5f6f7;
+  --kuning-muda: #fffbe6;
+  --kuning-emas: #f0c040;
+  --merah-muda: #ffd6d6;
+  --hijau-muda: #d4edda;
+  --ungu-muda: #e8d5f5;
+  --kuning-asesmen: #fff3cd;
+  --teks-utama: #1a1a2e;
+  --teks-abu: #6c757d;
+}
+\`\`\`
+
+**TIPOGRAFI:**
+Font: Arial, Calibri, atau sans-serif. Kode TP: Courier New/monospace.
+Teks tabel: 10-11pt. Header tabel: 10pt bold. Judul bagian: 12pt bold.
+
+**TABEL:**
+Header baris: background var(--biru-tua), teks putih, bold.
+Baris alternatif: putih dan var(--biru-sangat-muda).
+Border: 1px solid #dee2e6. Border-radius pada badge/kotak kode.
+
+**CETAK (CSS @media print):**
+- Dok 1 (CP): A4 Portrait, margin 2cm
+- Dok 2 (TP): A4 Portrait, margin 2cm
+- Dok 3 (ATP): A4 Landscape, margin 1.5cm
+- Dok 4 (Prota): A4 Portrait, margin 2cm
+- Dok 5 (Prosem): A4 Landscape, margin 1cm 1.5cm
+- Dok 6 (KKTP): A4 Landscape, margin 1.5cm
+- Dok 7 (Modul Ajar): A4 Portrait, margin 2cm
+- LKPD & Assessment: A4 Portrait, margin 2cm
+
+Semua dokumen: page-break-inside: avoid pada <tr> dan kotak komponen.
+
+**TIDAK BOLEH:**
+[X] Watermark atau teks demo
+[X] Sel tabel kosong atau berisi placeholder
+[X] Inkonsistensi data antar dokumen (kode TP, JP, nama elemen, dll.)
+[X] Konten generik yang tidak relevan dengan mapel/fase/tema
+
+---
+
+## ========================================
+##   VALIDASI KONSISTENSI
+## ========================================
+
+Sebelum menghasilkan setiap dokumen, verifikasi:
+
+[v] Kode TP: identik di semua dokumen?
+[v] Rumusan TP: identik di semua dokumen?
+[v] Total JP: sama persis di semua dokumen?
+[v] Pembagian semester: konsisten di Dok 3, 4, 5?
+[v] JP per semester: konsisten di Dok 4 dan Dok 5?
+[v] Materi Pokok: konsisten di Dok 3, 4, 5, 7?
+[v] IKTP & Deskriptor level: dari Dok 6 digunakan di Dok 7?
+[v] Nama elemen: identik di semua dokumen?
+[v] Identitas (nama guru, sekolah, NIP): identik di semua dokumen?
+[v] Palet warna, kop sekolah, tipografi: konsisten di semua dokumen?
+[v] LKPD terintegrasi dengan Modul Ajar?
+[v] Assessment sesuai dengan KKTP?
+[v] Bacaan/Referensi relevan dengan tema?
+[v] Tindak Lanjut sesuai dengan kebutuhan peserta didik?
+
+---
+
+## ==============================
+##   OUTPUT YANG DIHARAPKAN
+## ==============================
+
+Hasilkan **7 file HTML** + **1 LKPD** + **1 Assessment** + **1 Bacaan/Referensi** + **1 Tindak Lanjut** yang:
+[v] Masing-masing dapat langsung dibuka di browser & dicetak profesional
+[v] Data 100% konsisten antar semua dokumen
+[v] Semua konten terisi - tidak ada sel kosong atau placeholder
+[v] Desain identik dan profesional di seluruh dokumen
+[v] Setiap dokumen memiliki kop sekolah, nomor dokumen, dan TTD lengkap
+[v] Modul Ajar memuat 3 Bagian lengkap (A, B, C) dengan semua sub-komponen
+[v] LKPD memiliki soal/indikator sesuai ${lkpdSoal} yang diminta
+[v] Assessment memiliki ${assessmentSoal} soal dengan level ${assessmentLevel}
+[v] Bacaan/Referensi berjumlah ${bacaanJumlah} dengan format ${bacaanFormat}
+[v] Tindak Lanjut memiliki program yang terstruktur dan terukur
+
+Mulai dengan Dokumen 1 (Analisis CP). Setelah selesai, lanjutkan ke
+Dokumen 2 tanpa jeda. Terus hingga semua komponen selesai.
+Beri tanda "[KOMPONEN N SELESAI (OK)]" setelah setiap komponen selesai
+agar saya dapat memantau progres.`;
+
+        rawGeneratedPrompt = promptTemplate;
+
+        document.getElementById('teksPromptCP').textContent = promptTemplate;
+        
+        // Sembunyikan placeholder, tampilkan hasil
+        document.getElementById('result-placeholder').style.display = 'none';
+        document.getElementById('km-prompt-box').classList.add('visible');
+        document.getElementById('pg-bottom-actions').classList.add('visible');
+        document.getElementById('pg-stats').style.display = 'flex';
+        
+        document.getElementById('stat-dokumen').textContent = '7';
+        document.getElementById('stat-lkpd').textContent = '1';
+        document.getElementById('stat-assessment').textContent = '1';
+        document.getElementById('stat-bacaan').textContent = bacaanJumlah || '5';
+        document.getElementById('stat-tindaklanjut').textContent = '1';
+
+        // Scroll ke panel hasil (mobile)
+        if (window.innerWidth <= 1200) {
+            document.getElementById('km-prompt-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+
+    // ============================================================
+    //  COPY PROMPT
+    // ============================================================
+    function copyPromptHandler() {
+        const btn = document.getElementById('btnCopyBottom');
+        if (!rawGeneratedPrompt) {
+            alert('Belum ada prompt yang digenerate. Silakan isi form terlebih dahulu.');
+            return;
+        }
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(rawGeneratedPrompt).then(() => {
+                animasiTombol(btn, 'Copy Prompt');
+            }).catch(() => {
+                fallbackCopy(rawGeneratedPrompt, btn, 'Copy Prompt');
+            });
+        } else {
+            fallbackCopy(rawGeneratedPrompt, btn, 'Copy Prompt');
+        }
+    }
+
+    function fallbackCopy(text, btn, originalLabel) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.top = "-9999px";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            animasiTombol(btn, originalLabel);
+        } catch (err) {
+            alert('Gagal menyalin. Silakan seleksi teks secara manual.');
+        }
+        document.body.removeChild(textArea);
+    }
+
+    function animasiTombol(tombol, originalLabel) {
+        const originalHTML = tombol.innerHTML;
+        tombol.classList.add('berhasil');
+        tombol.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Berhasil!
+        `;
+        setTimeout(function() {
+            tombol.classList.remove('berhasil');
+            tombol.innerHTML = originalHTML;
+        }, 2200);
+    }
+
+    // ============================================================
+    //  SAVE PROMPT
+    // ============================================================
+    function savePromptHandler() {
+        const btn = document.getElementById('btnSaveBottom');
+        if (!rawGeneratedPrompt) {
+            alert('Belum ada prompt yang digenerate. Silakan isi form terlebih dahulu.');
+            return;
+        }
+
+        addToRiwayat(rawGeneratedPrompt);
+        animasiTombol(btn, 'Save Prompt');
+
+        setTimeout(() => {
+            if (confirm('✅ Prompt berhasil disimpan ke Riwayat!\n\nApakah Anda ingin membuka menu Riwayat sekarang?')) {
+                openRiwayat();
+            }
+        }, 300);
+    }
+
+    document.getElementById('btnCopyBottom').addEventListener('click', copyPromptHandler);
+    document.getElementById('btnSaveBottom').addEventListener('click', savePromptHandler);
+
+    // ============================================================
+    //  KEYBOARD SHORTCUT: Ctrl+Enter
+    // ============================================================
+    document.getElementById('form-generator-master').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            this.dispatchEvent(new Event('submit'));
+        }
+    });
+
+    // ============================================================
+    //  INISIALISASI
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCurrentDate();
+        initSidebarMenu();
+    });
+
+    console.log('✅ Prompt Master Generator RPM - SMK KARYA BANGSA');
+    console.log('💡 Tekan Ctrl+Enter untuk generate prompt');
+</script>
+
+</body>
+</html>

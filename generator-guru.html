@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generator Aplikasi Interaktif v3.1 — Digitalisasi</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+  :root {
+    --p: #1a3a6c; --p2: #2c5aa0; --a: #f4b942;
+    --bg: #f5f7fb; --card: #ffffff; --text: #1e293b;
+    --muted: #64748b; --border: #e2e8f0;
+    --success: #22c55e; --danger: #ef4444; --warn: #f59e0b;
+    --code-bg: #0f172a; --code-text: #e2e8f0;
+  }
+  body.dark {
+    --bg: #0b1220; --card: #111827; --text: #e5e7eb;
+    --muted: #94a3b8; --border: #263449;
+    --code-bg: #020617; --code-text: #cbd5e1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: Arial, sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.6; transition: background 0.3s, color 0.3s;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  /* Izinkan seleksi & copy di area form, preview prompt, dan textarea */
+  input, textarea, select,
+  .preview, .preview *,
+  .panca-item, .panca-item * {
+    -webkit-user-select: text !important;
+    -khtml-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+  }
+  header {
+    background: linear-gradient(135deg, #0f2444, var(--p2));
+    color: white; padding: 26px 20px; text-align: center;
+    position: relative;
+  }
+  header h1 { margin: 0 0 4px; font-size: clamp(19px, 4vw, 26px); }
+  header p { margin: 0; opacity: 0.9; font-size: 13px; }
+  .dark-toggle {
+    position: absolute; top: 14px; right: 14px;
+    background: #ffffff22; border: 1px solid #ffffff40;
+    color: white; padding: 7px 11px; border-radius: 8px;
+    cursor: pointer; font-size: 16px;
+  }
+  .dark-toggle:hover { background: #ffffff40; }
+
+  .main-tabs {
+    display: flex; gap: 6px; overflow-x: auto;
+    padding: 12px 20px; background: var(--card);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .main-tab {
+    border: 1px solid var(--border); background: var(--card);
+    color: var(--text); padding: 9px 15px; border-radius: 9px;
+    cursor: pointer; white-space: nowrap; font-weight: bold;
+    font-size: 14px; display: flex; align-items: center; gap: 7px;
+  }
+  .main-tab.active { background: var(--p); color: white; border-color: var(--p); }
+
+  main { max-width: 1100px; margin: auto; padding: 22px 18px 60px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px; margin-bottom: 18px;
+    box-shadow: 0 4px 16px #0f24440a;
+  }
+  h2 { color: var(--p); margin-top: 0; font-size: 19px; display: flex; align-items: center; gap: 8px; }
+  .dark h2 { color: #93c5fd; }
+  h3 { color: var(--p); font-size: 15px; margin-bottom: 6px; }
+  .dark h3 { color: #93c5fd; }
+
+  label { display: block; font-weight: bold; margin: 14px 0 5px; font-size: 14px; }
+  .hint { font-size: 12px; color: var(--muted); font-weight: normal; margin-left: 4px; }
+  input[type="text"], input[type="password"], select, textarea {
+    width: 100%; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: 9px;
+    font: inherit; background: var(--card); color: var(--text);
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--p2); border-color: var(--p2);
+  }
+  textarea { min-height: 130px; resize: vertical; font-family: monospace; font-size: 13px; }
+
+  .panca-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 8px; margin-top: 8px;
+  }
+  .panca-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 11px; border: 1px solid var(--border);
+    border-radius: 9px; cursor: pointer; font-size: 13px;
+    background: var(--card);
+  }
+  .panca-item:hover { background: #f1f5f9; }
+  .dark .panca-item:hover { background: #1e293b; }
+  .panca-item.checked { background: #eef6ff; border-color: var(--p2); }
+  .dark .panca-item.checked { background: #10213a; }
+
+  .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  button {
+    cursor: pointer; font: inherit; border: 0;
+    padding: 10px 16px; border-radius: 9px;
+    font-weight: bold; transition: 0.2s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  }
+  .btn-primary { background: var(--p); color: white; }
+  .btn-primary:hover { background: var(--p2); }
+  .btn-secondary { background: var(--card); color: var(--p); border: 1px solid var(--p); }
+  .btn-secondary:hover { background: #eef6ff; }
+  .dark .btn-secondary:hover { background: #10213a; }
+  .btn-ai { background: var(--a); color: #0f2444; }
+  .btn-ai:hover { background: #e0a82e; }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-sm { padding: 7px 12px; font-size: 13px; }
+
+  .preview {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px;
+    font-family: 'Courier New', monospace; font-size: 12.5px;
+    line-height: 1.6; white-space: pre-wrap; word-wrap: break-word;
+    max-height: 420px; overflow-y: auto;
+  }
+  .preview .slot { color: #fbbf24; font-weight: bold; }
+
+  .status {
+    margin-top: 10px; padding: 9px 13px; border-radius: 8px;
+    font-size: 13px; display: none;
+  }
+  .status.ok { display: block; background: #dcfce7; color: #166534; }
+  .status.warn { display: block; background: #fef3c7; color: #92400e; }
+  .status.err { display: block; background: #fee2e2; color: #991b1b; }
+  .dark .status.ok { background: #14532d; color: #bbf7d0; }
+  .dark .status.warn { background: #78350f; color: #fde68a; }
+  .dark .status.err { background: #7f1d1d; color: #fecaca; }
+
+  .panduan {
+    background: #fff8e5; border-left: 5px solid var(--a);
+    padding: 13px 17px; border-radius: 8px;
+    font-size: 13.5px; margin-bottom: 18px;
+  }
+  .dark .panduan { background: #1c1b13; }
+  .panduan ol { margin: 7px 0 0; padding-left: 20px; }
+  .panduan li { margin-bottom: 5px; }
+
+  .ai-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .ai-links a {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 13px; border-radius: 8px; background: var(--card);
+    border: 1px solid var(--border); color: var(--p);
+    text-decoration: none; font-weight: bold; font-size: 13px;
+  }
+  .ai-links a:hover { background: #eef6ff; border-color: var(--p2); }
+  .dark .ai-links a:hover { background: #10213a; }
+  .dark .ai-links a { color: #93c5fd; }
+
+  .preset-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .preset-chip {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 7px 11px; border-radius: 20px; font-size: 12.5px;
+    cursor: pointer; color: var(--text);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .preset-chip:hover { background: var(--p); color: white; border-color: var(--p); }
+
+  .history-item {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 10px; padding: 10px 12px; border: 1px solid var(--border);
+    border-radius: 9px; margin-bottom: 7px; font-size: 13.5px;
+  }
+  .history-item .meta { color: var(--muted); font-size: 12px; }
+  .history-item .actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .galeri-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .galeri-card {
+    border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; cursor: pointer; background: var(--card);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .galeri-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px #0f24441a; }
+  .galeri-thumb { height: 120px; display: grid; place-items: center; font-size: 46px; color: white; }
+  .galeri-body { padding: 12px 14px; }
+  .galeri-body h4 { margin: 0 0 3px; color: var(--p); font-size: 14.5px; }
+  .dark .galeri-body h4 { color: #93c5fd; }
+  .galeri-body p { margin: 0; font-size: 12.5px; color: var(--muted); }
+
+  .modal-bg {
+    display: none; position: fixed; inset: 0;
+    background: #000000aa; z-index: 100;
+    padding: 20px; overflow-y: auto;
+  }
+  .modal-bg.show { display: flex; align-items: flex-start; justify-content: center; }
+  .modal {
+    background: var(--card); border-radius: 14px;
+    max-width: 900px; width: 100%; padding: 22px;
+    margin-top: 30px;
+  }
+  .modal h3 { margin-top: 0; }
+  .modal .close {
+    float: right; background: var(--danger); color: white;
+    border-radius: 8px; padding: 6px 12px; font-size: 13px;
+  }
+  .iframe-wrap {
+    border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; margin-top: 12px; background: white;
+  }
+  iframe { width: 100%; height: 520px; border: 0; display: block; }
+
+  .checklist {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 6px; margin-top: 10px; font-size: 13px;
+  }
+  .checklist .item {
+    display: flex; align-items: center; gap: 7px;
+    padding: 7px 10px; border-radius: 7px; border: 1px solid var(--border);
+  }
+  .checklist .item.ok { background: #dcfce7; color: #166534; border-color: #86efac; }
+  .checklist .item.no { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+  .dark .checklist .item.ok { background: #14532d; color: #bbf7d0; border-color: #22c55e; }
+  .dark .checklist .item.no { background: #7f1d1d; color: #fecaca; border-color: #ef4444; }
+
+  .kode-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #dbeafe; color: #1e40af; padding: 4px 10px;
+    border-radius: 20px; font-size: 12px; font-weight: bold;
+  }
+  .dark .kode-badge { background: #1e3a8a; color: #bfdbfe; }
+
+  footer { text-align: center; padding: 20px; color: var(--muted); font-size: 12.5px; }
+
+  /* Overlay peringatan DevTools & Print */
+  #devtoolsOverlay, #printOverlay {
+    position: fixed; inset: 0; z-index: 99999;
+    display: none; align-items: center; justify-content: center;
+    flex-direction: column; text-align: center; padding: 30px;
+    font-family: Arial, sans-serif;
+  }
+  #devtoolsOverlay { background: #0b1220; color: #e5e7eb; }
+  #printOverlay { background: #000; color: #fff; font-size: 20px; }
+  #devtoolsOverlay h2 { color: #f4b942; margin: 0 0 12px; font-size: 22px; }
+  #devtoolsOverlay p { max-width: 520px; line-height: 1.7; color: #cbd5e1; }
+
+  @media (max-width: 600px) {
+    main { padding: 14px 12px 40px; }
+    .card { padding: 16px; }
+    .btn-row { flex-direction: column; }
+    .btn-row button { width: 100%; }
+    .history-item { flex-direction: column; align-items: flex-start; }
+    .history-item .actions { width: 100%; }
+    .history-item .actions button { flex: 1; }
+  }
+
+  /* Sembunyikan konten saat print (kecuali jika perlu) */
+  @media print {
+    body.print-blocked * { visibility: hidden !important; }
+    body.print-blocked::after {
+      content: "Pencetakan dibatasi pada halaman ini.";
+      visibility: visible !important;
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; background: #fff; color: #000;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="dark-toggle" onclick="toggleDark()" id="darkBtn" title="Mode gelap"><i class="fa-solid fa-moon"></i></button>
+  <h1><i class="fa-solid fa-rocket"></i> Generator Aplikasi Interaktif v3.1</h1>
+  <p>Isi form → salin prompt → tempel ke AI → preview & unduh</p>
+</header>
+
+<div class="main-tabs">
+  <button class="main-tab active" onclick="bukaPanel(0)"><i class="fa-solid fa-puzzle-piece"></i> Buat Prompt</button>
+  <button class="main-tab" onclick="bukaPanel(1)"><i class="fa-solid fa-lightbulb"></i> Preset Topik</button>
+  <button class="main-tab" onclick="bukaPanel(2)"><i class="fa-solid fa-images"></i> Galeri Contoh</button>
+  <button class="main-tab" onclick="bukaPanel(3)"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat</button>
+  <button class="main-tab" onclick="bukaPanel(4)"><i class="fa-solid fa-eye"></i> Preview & Unduh</button>
+</div>
+
+<main>
+
+  <!-- ============ PANEL 1: BUAT PROMPT ============ -->
+  <div class="panel active">
+    <div class="panduan">
+      <b><i class="fa-solid fa-clipboard-list"></i> Cara pakai:</b>
+      <ol>
+        <li>Isi form di bawah (bisa pilih dari tab <b>Preset Topik</b>).</li>
+        <li>Pilih maksimal 3 Panca Cinta.</li>
+        <li>Lengkapi identitas sekolah & guru (opsional, untuk laporan PDF).</li>
+        <li>Klik <b>Buat Prompt</b> → <b>Salin Prompt</b>.</li>
+        <li>Tempel ke AI. Tunggu 1–2 menit.</li>
+        <li>Salin kode HTML dari AI → buka tab <b>Preview & Unduh</b> → tempel → validasi → lihat & unduh.</li>
+      </ol>
+    </div>
+
+    <!-- KODE AKSES GURU -->
+    <div class="card">
+      <h2><i class="fa-solid fa-key"></i> Akses Guru</h2>
+      <p style="font-size:13px;color:var(--muted);margin-top:0;">
+        Masukkan kode akses untuk membuka form.</p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <input type="password" id="kodeInput" placeholder="Masukkan kode akses guru" style="flex:1; min-width:200px;">
+        <button class="btn-primary" onclick="cekKode()"><i class="fa-solid fa-unlock"></i> Buka Form</button>
+      </div>
+      <div class="status" id="statusKode"></div>
+    </div>
+
+    <div id="formArea" style="display:none;">
+      <div class="card">
+        <h2><i class="fa-solid fa-puzzle-piece"></i> Isi Tema Kelompok</h2>
+
+        <label for="mapel">1. Mata Pelajaran</label>
+        <input type="text" id="mapel" placeholder="Contoh: Matematika / Bahasa Inggris">
+
+        <label for="jenjang">2. Jenjang</label>
+        <input type="text" id="jenjang" value="SMK Kelas 10">
+
+        <label for="judulBab">3. Judul Bab <span class="hint">(contoh: Bab 2 Pecahan dan Desimal)</span></label>
+        <input type="text" id="judulBab" placeholder="Contoh: Bab 2 Pecahan dan Desimal">
+
+        <label for="subBab">4. Daftar Sub Bab <span class="hint">(Tulis satu per baris)</span></label>
+        <textarea id="subBab" style="min-height: 90px; font-family: inherit; font-size: 14px;" placeholder="A. Penjumlahan dan Pengurangan Pecahan&#10;B. Perkalian Pecahan&#10;C. Pembagian Pecahan&#10;D. Bilangan Desimal"></textarea>
+
+        <label>5. Panca Cinta <span class="hint">(maks 3)</span></label>
+        <div class="panca-grid" id="pancaGrid">
+          <label class="panca-item"><input type="checkbox" value="Cinta Allah SWT dan Rasul-Nya"> Cinta Allah SWT dan Rasul-Nya</label>
+          <label class="panca-item"><input type="checkbox" value="Cinta Ilmu"> Cinta Ilmu</label>
+          <label class="panca-item"><input type="checkbox" value="Cinta Lingkungan"> Cinta Lingkungan</label>
+          <label class="panca-item"><input type="checkbox" value="Cinta Diri dan Sesama Manusia"> Cinta Diri dan Sesama Manusia</label>
+          <label class="panca-item"><input type="checkbox" value="Cinta Tanah Air"> Cinta Tanah Air</label>
+        </div>
+
+        <h3 style="margin-top:22px;"><i class="fa-solid fa-school"></i> Identitas Sekolah & Guru <span class="hint">(untuk laporan PDF)</span></h3>
+
+        <label for="sekolah">6. Nama Sekolah</label>
+        <input type="text" id="sekolah" placeholder="Contoh: SMK Negeri 1 Jakarta">
+
+        <label for="guru">7. Nama Guru Pengajar</label>
+        <input type="text" id="guru" placeholder="Contoh: Budi Santoso, S.Pd.">
+
+        <label for="tahun">8. Tahun Pelajaran</label>
+        <input type="text" id="tahun" value="2026/2027">
+
+        <div class="btn-row">
+          <button class="btn-primary" onclick="buatPrompt()"><i class="fa-solid fa-bolt"></i> Buat Prompt</button>
+          <button class="btn-secondary" onclick="resetForm()"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+          <button class="btn-secondary" onclick="acakTopik()"><i class="fa-solid fa-dice"></i> Acak Topik</button>
+        </div>
+        <div class="status" id="status"></div>
+      </div>
+
+      <div class="card">
+        <h2><i class="fa-solid fa-eye"></i> Preview Prompt</h2>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:0;">Bagian <span style="color:#d97706;font-weight:bold;">kuning</span> = isian kelompokmu.</p>
+        <div class="preview" id="preview">Isi form di atas, lalu klik "Buat Prompt".</div>
+        <div class="btn-row">
+          <button class="btn-ai" onclick="salinPrompt()"><i class="fa-solid fa-copy"></i> Salin Prompt</button>
+          <button class="btn-secondary" onclick="unduhPrompt()"><i class="fa-solid fa-download"></i> Unduh Prompt (.txt)</button>
+          <button class="btn-secondary" onclick="simpanRiwayat()"><i class="fa-solid fa-clock-rotate-left"></i> Simpan ke Riwayat</button>
+        </div>
+        <h3 style="margin-top:22px;"><i class="fa-solid fa-globe"></i> Buka AI</h3>
+        <div class="ai-links">
+          <a href="https://chat.openai.com" target="_blank" rel="noopener"><i class="fa-solid fa-robot"></i> ChatGPT</a>
+          <a href="https://claude.ai" target="_blank" rel="noopener"><i class="fa-solid fa-brain"></i> Claude</a>
+          <a href="https://gemini.google.com" target="_blank" rel="noopener"><i class="fa-solid fa-wand-magic-sparkles"></i> Gemini</a>
+          <a href="https://copilot.microsoft.com" target="_blank" rel="noopener"><i class="fa-brands fa-microsoft"></i> Copilot</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PANEL 2: PRESET TOPIK ============ -->
+  <div class="panel">
+    <div class="card">
+      <h2><i class="fa-solid fa-lightbulb"></i> Preset Topik SMK</h2>
+      <p style="font-size:13px;color:var(--muted);">Klik salah satu preset untuk mengisi form secara otomatis.</p>
+      <div class="preset-row" id="presetRow"></div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn-secondary btn-sm" onclick="exportPreset()"><i class="fa-solid fa-file-export"></i> Export Preset (.json)</button>
+        <button class="btn-secondary btn-sm" onclick="document.getElementById('importPreset').click()"><i class="fa-solid fa-file-import"></i> Import Preset (.json)</button>
+        <input type="file" id="importPreset" accept=".json" style="display:none;" onchange="importPresetFile(event)">
+      </div>
+      <div class="status" id="statusPreset"></div>
+    </div>
+  </div>
+
+  <!-- ============ PANEL 3: GALERI CONTOH ============ -->
+  <div class="panel">
+    <div class="card">
+      <h2><i class="fa-solid fa-images"></i> Galeri Contoh Hasil</h2>
+      <p style="font-size:13px;color:var(--muted);">Klik kartu untuk melihat deskripsi & ide yang bisa kalian tiru.</p>
+      <div class="galeri-grid" id="galeriGrid"></div>
+    </div>
+  </div>
+
+  <!-- ============ PANEL 4: RIWAYAT ============ -->
+  <div class="panel">
+    <div class="card">
+      <h2><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Prompt</h2>
+      <p style="font-size:13px;color:var(--muted);">Tersimpan di browser ini. Bisa dipakai ulang kapan saja.</p>
+      <div id="historyList"><p style="color:var(--muted);">Belum ada riwayat.</p></div>
+      <div class="btn-row">
+        <button class="btn-danger btn-sm" onclick="hapusRiwayat()"><i class="fa-solid fa-trash"></i> Hapus Semua Riwayat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PANEL 5: PREVIEW & UNDUH ============ -->
+  <div class="panel">
+    <div class="card">
+      <h2><i class="fa-solid fa-eye"></i> Tempel Kode HTML Hasil AI</h2>
+      <p style="font-size:13px;color:var(--muted);">Salin kode HTML dari AI, tempel di sini. Generator akan memvalidasi, menampilkan preview, dan memungkinkan unduh.</p>
+      <textarea id="htmlInput" placeholder="Tempel kode HTML lengkap di sini..."></textarea>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="validasiHTML()"><i class="fa-solid fa-check"></i> Validasi & Preview</button>
+        <button class="btn-secondary" onclick="bersihkanHTML()"><i class="fa-solid fa-broom"></i> Bersihkan</button>
+        <button class="btn-ai" onclick="unduhHTML()"><i class="fa-solid fa-download"></i> Unduh .html</button>
+      </div>
+      <div class="status" id="statusHTML"></div>
+      <div id="checklistArea" style="display:none;">
+        <h3 style="margin-top:18px;"><i class="fa-solid fa-list-check"></i> Checklist Validasi</h3>
+        <div class="checklist" id="checklist"></div>
+      </div>
+    </div>
+    <div class="card" id="previewCard" style="display:none;">
+      <h2><i class="fa-solid fa-display"></i> Live Preview</h2>
+      <div class="iframe-wrap">
+        <iframe id="previewFrame" sandbox="allow-scripts allow-forms allow-modals allow-same-origin"></iframe>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="bukaTabBaru()"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka di Tab Baru</button>
+        <button class="btn-secondary" onclick="bukaModalPreview()"><i class="fa-solid fa-expand"></i> Buka di Modal</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Generator Aplikasi Interaktif v3.1 • Digitalisasi • SMK KARYA BANGSA
+</footer>
+
+<!-- MODAL GALERI -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)tutupModal()">
+  <div class="modal">
+    <button class="close" onclick="tutupModal()"><i class="fa-solid fa-xmark"></i> Tutup</button>
+    <h3 id="modalTitle">Judul</h3>
+    <p id="modalBody" style="font-size:14px;"></p>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="pakaiIdeModal()"><i class="fa-solid fa-check"></i> Pakai Ide Ini</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PREVIEW HTML -->
+<div class="modal-bg" id="modalPreviewBg" onclick="if(event.target===this)tutupModalPreview()">
+  <div class="modal" style="max-width:1000px;">
+    <button class="close" onclick="tutupModalPreview()"><i class="fa-solid fa-xmark"></i> Tutup</button>
+    <h3><i class="fa-solid fa-display"></i> Preview Aplikasi Hasil</h3>
+    <div class="iframe-wrap">
+      <iframe id="modalPreviewFrame" sandbox="allow-scripts allow-forms allow-modals allow-same-origin" style="height:600px;"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY PROTEKSI -->
+<div id="devtoolsOverlay">
+  <h2>⚠ Akses Dibatasi</h2>
+  <p>Alat pengembang (DevTools) terdeteksi.<br>Silakan tutup DevTools untuk melanjutkan menggunakan aplikasi ini.</p>
+</div>
+<div id="printOverlay">🖨 Pencetakan halaman ini dibatasi.</div>
+
+<script>
+/* ============================================================
+   KONFIGURASI
+   ============================================================ */
+const KODE_GURU = "RUANGGURU"; // GANTI: kode akses guru
+
+/* ============================================================
+   MASTER PROMPT v3.1
+   ============================================================ */
+const MASTER_PROMPT = `Kamu adalah Senior EdTech Developer dan Ahli Desain Kurikulum tingkat SMA/MA/SMK.
+
+TUGAS:
+Buatkan satu file HTML lengkap (HTML+CSS+JS dalam satu file, tanpa file eksternal selain CDN Font Awesome) yang merupakan aplikasi pembelajaran interaktif untuk siswa.
+
+KETENTUAN WAJIB:
+1. Aplikasi harus bisa dijalankan hanya dengan membuka file .html di browser (tanpa server).
+2. Gunakan palet warna ceria dan ramah siswa. Sertakan mode gelap dengan tombol toggle (ikon bulan/matahari).
+3. Struktur aplikasi terdiri dari:
+   - Halaman LOGIN SISWA (input nama lengkap + kelas) sebelum masuk dashboard. Jika belum login, tampilkan halaman login.
+   - Sidebar navigasi: Dashboard, Materi Pembelajaran, Latihan Bertahap, Kuis Akhir, Hasil & Laporan, Refleksi Belajar, Identitas Siswa.
+   - Header dengan judul bab dan sub judul mata pelajaran.
+   - Progress bar yang terisi otomatis saat siswa menyelesaikan aktivitas.
+4. Pada setiap sub-bab, WAJIB ada minimal:
+   - Penjelasan materi singkat dengan rumus/konsep kunci.
+   - Visualisasi/Contoh nyata dalam kehidupan sehari-hari.
+   - Latihan Bertahap (melatih proses/langkah, bukan langsung jawaban akhir).
+5. Buat satu tab "Kuis Akhir" berisi minimal 5 soal pilihan ganda gabungan dari semua sub-bab, dengan pembahasan otomatis dan skor.
+6. Halaman "Refleksi" berisi 4 pertanyaan terstruktur:
+   a. Materi apa yang paling kamu pahami?
+   b. Bagian mana yang masih sulit?
+   c. Apa manfaat materi ini dalam kehidupan sehari-hari?
+   d. Apa rencanamu untuk meningkatkan pemahaman?
+7. Halaman "Hasil & Laporan" menampilkan nilai, rincian jawaban benar/salah,
+   dan tombol Ekspor PDF (menggunakan window.print dengan CSS @media print).
+   Laporan PDF WAJIB memuat: header sekolah/tahun/siswa, tabel rincian, pembahasan,
+   refleksi, dan kolom tanda tangan guru & peserta didik.
+8. Sertakan konstanta di awal <script> dengan komentar // GANTI:
+   const SCHOOL = "{SEKOLAH}";
+   const TEACHER = "{GURU}";
+   const YEAR = "{TAHUN}";
+9. Simpan data siswa, refleksi, progres, dan skor kuis di localStorage.
+10. Semua teks dalam Bahasa Indonesia (kecuali materi Bahasa Inggris).
+11. Desain responsif (HP & laptop). Sidebar bisa di-toggle di layar mobile.
+12. Integrasikan nilai Kurikulum Berbasis Cinta (KBC) Kemenag RI secara implisit.
+13. Gunakan Font Awesome untuk semua ikon.
+14. Sertakan komentar <!-- GANTI: ... --> pada bagian yang bisa diubah.
+
+TOPIK YANG DIMINTA:
+- Mata Pelajaran: {MATA_PELAJARAN}
+- Jenjang: {JENJANG}
+- Judul Bab: {JUDUL_BAB}
+- Sub Bab:
+{SUB_BAB}
+- Panca Cinta yang Diintegrasikan: {PANCA_CINTA}
+- Nama Sekolah: {SEKOLAH}
+- Guru Pengajar: {GURU}
+- Tahun Pelajaran: {TAHUN}
+
+Setelah selesai, tampilkan kode HTML lengkap dalam satu blok kode.`;
+
+/* ============================================================
+   PRESET TOPIK
+   ============================================================ */
+let PRESET = [
+  {
+    ikon: "fa-calculator", warna: "#2c5aa0",
+    mapel: "Matematika", jenjang: "SMK Kelas 10",
+    judulBab: "Bab 2 Pecahan dan Desimal",
+    subBab: "A. Penjumlahan dan Pengurangan Pecahan\nB. Perkalian Pecahan\nC. Pembagian Pecahan\nD. Bilangan Desimal",
+    panca: ["Cinta Ilmu"],
+    sekolah: "SMK Negeri 1 Jakarta", guru: "Budi Santoso, S.Pd.", tahun: "2026/2027"
+  },
+  {
+    ikon: "fa-language", warna: "#16a34a",
+    mapel: "Bahasa Inggris", jenjang: "SMK Kelas 10",
+    judulBab: "Chapter 1: Future Plans",
+    subBab: "A. Will vs Going To\nB. Present Continuous for Future\nC. Time Expressions",
+    panca: ["Cinta Ilmu", "Cinta Diri dan Sesama Manusia"],
+    sekolah: "SMK Negeri 2 Bandung", guru: "Siti Aminah, M.Pd.", tahun: "2026/2027"
+  },
+  {
+    ikon: "fa-network-wired", warna: "#d97706",
+    mapel: "Informatika / TKJ", jenjang: "SMK Kelas 10",
+    judulBab: "Bab 3: Dasar Jaringan Komputer",
+    subBab: "A. Pengenalan IP Address\nB. Subnetting Dasar\nC. Konfigurasi Router\nD. Troubleshooting",
+    panca: ["Cinta Ilmu", "Cinta Lingkungan"],
+    sekolah: "SMK Negeri 3 Surabaya", guru: "Ahmad Fauzi, S.Kom.", tahun: "2026/2027"
+  }
+];
+
+/* ============================================================
+   GALERI CONTOH
+   ============================================================ */
+const GALERI = [
+  {
+    judul: "Pecahan & Desimal Interaktif",
+    deskripsi: "Aplikasi Matematika kelas 10 dengan tab untuk Penjumlahan, Perkalian, Pembagian Pecahan, dan Desimal. Dilengkapi latihan bertahap, kuis akhir, refleksi 4 pertanyaan, laporan PDF dengan tanda tangan guru.",
+    ikon: "fa-calculator", warna: "#2c5aa0", preset: 0
+  },
+  {
+    judul: "Future Plans: Will vs Going To",
+    deskripsi: "Aplikasi Bahasa Inggris yang membedah penggunaan 'Will' dan 'Going To', dilengkapi visualisasi kalimat, latihan urutkan kata, dan kuis dengan pembahasan.",
+    ikon: "fa-language", warna: "#16a34a", preset: 1
+  },
+  {
+    judul: "Dasar Jaringan Komputer",
+    deskripsi: "Aplikasi TKJ yang membahas IP Address, Subnetting, hingga Konfigurasi Router. Siswa bisa melihat visualisasi topologi jaringan dan latihan simulasi.",
+    ikon: "fa-network-wired", warna: "#d97706", preset: 2
+  }
+];
+
+/* ============================================================
+   STATE & UTIL
+   ============================================================ */
+let promptTerakhir = "";
+let aksesTerbuka = false;
+
+function escapeHTML(str) {
+  return String(str).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[m]);
+}
+function $(id){ return document.getElementById(id); }
+
+/* ============================================================
+   PROTEKSI KEAMANAN
+   ============================================================ */
+(function proteksi() {
+  // 1. Blokir Ctrl+U, Ctrl+S, F12, Ctrl+Shift+I/J/C
+  document.addEventListener('keydown', function(e) {
+    const k = (e.key || '').toLowerCase();
+    const tag = (e.target && e.target.tagName ? e.target.tagName : '').toLowerCase();
+    const isField = (tag === 'input' || tag === 'textarea');
+
+    if (e.ctrlKey && !e.shiftKey && !e.altKey && k === 'u') { e.preventDefault(); return false; }
+    if (e.ctrlKey && !e.shiftKey && !e.altKey && k === 's') { e.preventDefault(); return false; }
+    if (k === 'f12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) { e.preventDefault(); return false; }
+    if (e.ctrlKey && !e.shiftKey && !e.altKey && k === 'a' && !isField) { e.preventDefault(); return false; }
+  }, false);
+
+  // 2. Blokir klik kanan (kecuali di form)
+  document.addEventListener('contextmenu', function(e) {
+    const tag = (e.target && e.target.tagName ? e.target.tagName : '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea') return true;
+    e.preventDefault(); return false;
+  }, false);
+
+  // 3. Blokir copy/cut/drag di luar form & preview
+  function isAllowedCopyTarget(t) {
+    if (!t) return false;
+    const tag = (t.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea') return true;
+    if (t.closest && (t.closest('.preview') || t.closest('.panca-item'))) return true;
+    return false;
+  }
+  document.addEventListener('copy', function(e) {
+    if (!isAllowedCopyTarget(e.target)) { e.preventDefault(); return false; }
+  }, false);
+  document.addEventListener('cut', function(e) {
+    if (!isAllowedCopyTarget(e.target)) { e.preventDefault(); return false; }
+  }, false);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, false);
+
+  // 4. Blokir double-click select
+  document.addEventListener('mousedown', function(e) {
+    if (e.detail > 1) {
+      const tag = (e.target && e.target.tagName ? e.target.tagName : '').toLowerCase();
+      if (tag !== 'input' && tag !== 'textarea') e.preventDefault();
+    }
+  }, false);
+
+  // 5. Deteksi DevTools terbuka (heuristik)
+  let devOpen = false;
+  const threshold = 160;
+  setInterval(function() {
+    const wDiff = window.outerWidth - window.innerWidth > threshold;
+    const hDiff = window.outerHeight - window.innerHeight > threshold;
+    const ov = document.getElementById('devtoolsOverlay');
+    if (!ov) return;
+    if (wDiff || hDiff) {
+      if (!devOpen) {
+        devOpen = true;
+        ov.style.display = 'flex';
+        const fa = document.getElementById('formArea');
+        if (fa) fa.style.visibility = 'hidden';
+      }
+    } else if (devOpen) {
+      devOpen = false;
+      ov.style.display = 'none';
+      const fa = document.getElementById('formArea');
+      if (fa) fa.style.visibility = 'visible';
+    }
+  }, 800);
+
+  // 6. Blokir print (kecuali dari aplikasi siswa yang di-preview)
+  window.addEventListener('beforeprint', function() {
+    if (window !== window.top) return; // izinkan print di iframe preview
+    document.body.classList.add('print-blocked');
+    const ov = document.getElementById('printOverlay');
+    if (ov) ov.style.display = 'flex';
+  });
+  window.addEventListener('afterprint', function() {
+    document.body.classList.remove('print-blocked');
+    const ov = document.getElementById('printOverlay');
+    if (ov) ov.style.display = 'none';
+  });
+})();
+
+/* ============================================================
+   KODE AKSES GURU
+   ============================================================ */
+function cekKode() {
+  const kode = $("kodeInput").value.trim();
+  if (kode === KODE_GURU) {
+    aksesTerbuka = true;
+    $("formArea").style.display = 'block';
+    setStatusKode('ok', 'Akses diberikan. Form siap diisi.');
+    try { sessionStorage.setItem("genAkses", "1"); } catch(e){}
+  } else {
+    setStatusKode('err', 'Kode akses salah. Coba lagi.');
+  }
+}
+function setStatusKode(tipe, msg) {
+  const el = $("statusKode");
+  el.className = "status " + tipe;
+  let icon = tipe === 'ok' ? '<i class="fa-solid fa-circle-check"></i> ' : '<i class="fa-solid fa-circle-xmark"></i> ';
+  el.innerHTML = icon + msg;
+  if (tipe === 'ok') setTimeout(() => { el.className = "status"; }, 5000);
+}
+(function initAkses(){
+  try {
+    if (sessionStorage.getItem("genAkses") === "1") {
+      aksesTerbuka = true;
+      $("formArea").style.display = 'block';
+    }
+  } catch(e){}
+})();
+
+/* ============================================================
+   TAB PANEL
+   ============================================================ */
+function bukaPanel(n) {
+  document.querySelectorAll(".panel").forEach((e,i) => e.classList.toggle("active", i===n));
+  document.querySelectorAll(".main-tab").forEach((e,i) => e.classList.toggle("active", i===n));
+}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+function toggleDark() {
+  document.body.classList.toggle("dark");
+  const dark = document.body.classList.contains("dark");
+  $("darkBtn").innerHTML = dark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+  try { localStorage.setItem("genDark", dark ? "1" : "0"); } catch(e){}
+}
+(function initDark(){
+  try {
+    if (localStorage.getItem("genDark") === "1") {
+      document.body.classList.add("dark");
+      $("darkBtn").innerHTML = '<i class="fa-solid fa-sun"></i>';
+    }
+  } catch(e){}
+})();
+
+/* ============================================================
+   PANCA CINTA
+   ============================================================ */
+document.querySelectorAll('#pancaGrid input[type="checkbox"]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    cb.closest('.panca-item').classList.toggle('checked', cb.checked);
+    const checked = document.querySelectorAll('#pancaGrid input:checked');
+    if (checked.length > 3) {
+      cb.checked = false;
+      cb.closest('.panca-item').classList.remove('checked');
+      setStatus('warn', 'Maksimal 3 Panca Cinta.');
+    }
+  });
+});
+function ambilPanca() {
+  return Array.from(document.querySelectorAll('#pancaGrid input:checked')).map(c => c.value);
+}
+function setPanca(list) {
+  document.querySelectorAll('#pancaGrid input').forEach(cb => {
+    cb.checked = list.includes(cb.value);
+    cb.closest('.panca-item').classList.toggle('checked', cb.checked);
+  });
+}
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+function setStatus(tipe, msg, target="status") {
+  const el = $(target);
+  el.className = "status " + tipe;
+  let icon = "";
+  if (tipe === 'ok') icon = '<i class="fa-solid fa-circle-check"></i> ';
+  if (tipe === 'warn') icon = '<i class="fa-solid fa-triangle-exclamation"></i> ';
+  if (tipe === 'err') icon = '<i class="fa-solid fa-circle-xmark"></i> ';
+  el.innerHTML = icon + msg;
+  if (tipe) setTimeout(() => { el.className = "status"; }, 6000);
+}
+
+/* ============================================================
+   BUAT PROMPT
+   ============================================================ */
+function buatPrompt() {
+  const mapel = $("mapel").value.trim();
+  const jenjang = $("jenjang").value.trim();
+  const judulBab = $("judulBab").value.trim();
+  const subBab = $("subBab").value.trim();
+  const panca = ambilPanca();
+  const sekolah = $("sekolah").value.trim() || "SMK / Madrasah";
+  const guru = $("guru").value.trim() || "Guru Mata Pelajaran";
+  const tahun = $("tahun").value.trim() || "2026/2027";
+
+  if (!mapel || !jenjang || !judulBab || !subBab) {
+    return setStatus('err', 'Mapel, jenjang, judul bab, dan sub bab wajib diisi.');
+  }
+  if (panca.length === 0) return setStatus('err', 'Pilih minimal 1 Panca Cinta.');
+  if (panca.length > 3) return setStatus('err', 'Maksimal 3 Panca Cinta.');
+
+  let hasil = MASTER_PROMPT
+    .replace(/{MATA_PELAJARAN}/g, mapel)
+    .replace(/{JENJANG}/g, jenjang)
+    .replace(/{JUDUL_BAB}/g, judulBab)
+    .replace(/{SUB_BAB}/g, subBab)
+    .replace(/{PANCA_CINTA}/g, panca.join(', '))
+    .replace(/{SEKOLAH}/g, sekolah)
+    .replace(/{GURU}/g, guru)
+    .replace(/{TAHUN}/g, tahun);
+
+  promptTerakhir = hasil;
+
+  let previewHTML = escapeHTML(hasil)
+    .replace(escapeHTML(mapel), `<span class="slot">${escapeHTML(mapel)}</span>`)
+    .replace(escapeHTML(jenjang), `<span class="slot">${escapeHTML(jenjang)}</span>`)
+    .replace(escapeHTML(judulBab), `<span class="slot">${escapeHTML(judulBab)}</span>`)
+    .replace(escapeHTML(subBab), `<span class="slot">${escapeHTML(subBab).replace(/\n/g, '<br>')}</span>`)
+    .replace(escapeHTML(panca.join(', ')), `<span class="slot">${escapeHTML(panca.join(', '))}</span>`)
+    .replace(escapeHTML(sekolah), `<span class="slot">${escapeHTML(sekolah)}</span>`)
+    .replace(escapeHTML(guru), `<span class="slot">${escapeHTML(guru)}</span>`)
+    .replace(escapeHTML(tahun), `<span class="slot">${escapeHTML(tahun)}</span>`);
+
+  $("preview").innerHTML = previewHTML;
+  setStatus('ok', 'Prompt berhasil dibuat! Klik "Salin Prompt".');
+}
+
+function resetForm() {
+  $("mapel").value = '';
+  $("jenjang").value = 'SMK Kelas 10';
+  $("judulBab").value = '';
+  $("subBab").value = '';
+  $("sekolah").value = '';
+  $("guru").value = '';
+  $("tahun").value = '2026/2027';
+  document.querySelectorAll('#pancaGrid input').forEach(cb => {
+    cb.checked = false;
+    cb.closest('.panca-item').classList.remove('checked');
+  });
+  $("preview").textContent = 'Isi form di atas, lalu klik "Buat Prompt".';
+  $("status").className = 'status';
+  promptTerakhir = "";
+}
+
+/* ============================================================
+   PRESET
+   ============================================================ */
+function renderPreset() {
+  $("presetRow").innerHTML = PRESET.map((p, i) => `
+    <button class="preset-chip" onclick="pakaiPreset(${i})">
+      <i class="fa-solid ${p.ikon}" style="color:${p.warna};"></i> ${escapeHTML(p.mapel)} — ${escapeHTML(p.judulBab)}
+    </button>
+  `).join("");
+}
+function pakaiPreset(i) {
+  const p = PRESET[i];
+  if (!p) return;
+  $("mapel").value = p.mapel;
+  $("jenjang").value = p.jenjang;
+  $("judulBab").value = p.judulBab;
+  $("subBab").value = p.subBab;
+  $("sekolah").value = p.sekolah || '';
+  $("guru").value = p.guru || '';
+  $("tahun").value = p.tahun || '2026/2027';
+  setPanca(p.panca);
+  bukaPanel(0);
+  setStatus('ok', 'Preset dimuat: ' + p.judulBab);
+}
+function acakTopik() {
+  pakaiPreset(Math.floor(Math.random() * PRESET.length));
+}
+
+/* ============================================================
+   EXPORT / IMPORT PRESET
+   ============================================================ */
+function exportPreset() {
+  const blob = new Blob([JSON.stringify(PRESET, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'preset-generator-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  setStatus('ok', 'Preset diekspor.', 'statusPreset');
+}
+function importPresetFile(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw new Error('Format tidak valid');
+      PRESET = data;
+      renderPreset();
+      setStatus('ok', 'Preset berhasil diimpor (' + data.length + ' item).', 'statusPreset');
+    } catch (err) {
+      setStatus('err', 'Gagal impor: ' + err.message, 'statusPreset');
+    }
+  };
+  reader.readAsText(file);
+  ev.target.value = '';
+}
+
+/* ============================================================
+   SALIN & UNDUH PROMPT
+   ============================================================ */
+function salinPrompt() {
+  if (!promptTerakhir) return setStatus('warn', 'Klik "Buat Prompt" dulu.');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(promptTerakhir).then(() => {
+      setStatus('ok', 'Prompt tersalin! Tempel ke AI.');
+    }).catch(() => fallbackCopy());
+  } else {
+    fallbackCopy();
+  }
+  function fallbackCopy() {
+    const ta = document.createElement('textarea');
+    ta.value = promptTerakhir;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); setStatus('ok', 'Prompt tersalin (manual).'); }
+    catch(e) { setStatus('err', 'Gagal menyalin. Salin manual dari preview.'); }
+    document.body.removeChild(ta);
+  }
+}
+function unduhPrompt() {
+  if (!promptTerakhir) return setStatus('warn', 'Buat prompt dulu.');
+  const blob = new Blob([promptTerakhir], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'prompt-' + ($("judulBab").value.trim().slice(0,20).replace(/\s+/g,'-') || 'aplikasi') + '.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  setStatus('ok', 'Prompt diunduh.');
+}
+
+/* ============================================================
+   RIWAYAT
+   ============================================================ */
+function ambilRiwayat() {
+  try { return JSON.parse(localStorage.getItem('genRiwayat') || '[]'); }
+  catch(e){ return []; }
+}
+function simpanRiwayat() {
+  if (!promptTerakhir) return setStatus('warn', 'Buat prompt dulu.');
+  const list = ambilRiwayat();
+  list.unshift({
+    mapel: $("mapel").value.trim(),
+    jenjang: $("jenjang").value.trim(),
+    judulBab: $("judulBab").value.trim(),
+    subBab: $("subBab").value.trim(),
+    sekolah: $("sekolah").value.trim(),
+    guru: $("guru").value.trim(),
+    tahun: $("tahun").value.trim(),
+    prompt: promptTerakhir,
+    waktu: new Date().toLocaleString('id-ID')
+  });
+  localStorage.setItem('genRiwayat', JSON.stringify(list.slice(0, 20)));
+  renderRiwayat();
+  setStatus('ok', 'Tersimpan ke riwayat.');
+}
+function renderRiwayat() {
+  const list = ambilRiwayat();
+  if (!list.length) {
+    $("historyList").innerHTML = '<p style="color:var(--muted);">Belum ada riwayat.</p>';
+    return;
+  }
+  $("historyList").innerHTML = list.map((r, i) => `
+    <div class="history-item">
+      <div>
+        <b>${escapeHTML(r.judulBab)}</b><br>
+        <span class="meta">${escapeHTML(r.mapel)} • ${escapeHTML(r.jenjang)}${r.guru ? ' • ' + escapeHTML(r.guru) : ''} • ${r.waktu}</span>
+      </div>
+      <div class="actions">
+        <button class="btn-secondary btn-sm" onclick="pakaiRiwayat(${i})">Pakai</button>
+        <button class="btn-danger btn-sm" onclick="hapusSatu(${i})"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>
+  `).join("");
+}
+function pakaiRiwayat(i) {
+  const r = ambilRiwayat()[i];
+  if (!r) return;
+  $("mapel").value = r.mapel;
+  $("jenjang").value = r.jenjang;
+  $("judulBab").value = r.judulBab;
+  $("subBab").value = r.subBab || '';
+  $("sekolah").value = r.sekolah || '';
+  $("guru").value = r.guru || '';
+  $("tahun").value = r.tahun || '2026/2027';
+  promptTerakhir = r.prompt;
+  $("preview").innerHTML = escapeHTML(r.prompt).replace(/\n/g, '<br>');
+  bukaPanel(0);
+  if (!aksesTerbuka) {
+    $("formArea").style.display = 'block';
+    aksesTerbuka = true;
+  }
+  setStatus('ok', 'Riwayat dimuat.');
+}
+function hapusSatu(i) {
+  const list = ambilRiwayat();
+  list.splice(i, 1);
+  localStorage.setItem('genRiwayat', JSON.stringify(list));
+  renderRiwayat();
+}
+function hapusRiwayat() {
+  if (!confirm('Hapus semua riwayat?')) return;
+  localStorage.removeItem('genRiwayat');
+  renderRiwayat();
+  setStatus('ok', 'Riwayat dihapus.', 'status');
+}
+
+/* ============================================================
+   GALERI
+   ============================================================ */
+function renderGaleri() {
+  $("galeriGrid").innerHTML = GALERI.map((g, i) => `
+    <div class="galeri-card" onclick="bukaModal(${i})">
+      <div class="galeri-thumb" style="background:${g.warna}">
+        <i class="fa-solid ${g.ikon}"></i>
+      </div>
+      <div class="galeri-body">
+        <h4>${escapeHTML(g.judul)}</h4>
+        <p>${escapeHTML(g.deskripsi.substring(0,80))}…</p>
+      </div>
+    </div>
+  `).join("");
+}
+function bukaModal(i) {
+  const g = GALERI[i];
+  $("modalTitle").innerHTML = `<i class="fa-solid ${g.ikon}" style="color:${g.warna};"></i> ${escapeHTML(g.judul)}`;
+  $("modalBody").textContent = g.deskripsi;
+  $("modalBg").classList.add('show');
+  $("modalBg").dataset.preset = g.preset;
+}
+function tutupModal() { $("modalBg").classList.remove('show'); }
+function pakaiIdeModal() {
+  const i = Number($("modalBg").dataset.preset);
+  tutupModal();
+  pakaiPreset(i);
+}
+
+/* ============================================================
+   PREVIEW & UNDUH HTML + VALIDASI
+   ============================================================ */
+function validasiHTML() {
+  const html = $("htmlInput").value.trim();
+  if (!html) return setStatus('err', 'Tempel kode HTML dulu.', 'statusHTML');
+
+  const checks = [
+    { label: '<html>', ok: /<html[\s>]/i.test(html) },
+    { label: '<head>', ok: /<head[\s>]/i.test(html) },
+    { label: '<body>', ok: /<body[\s>]/i.test(html) },
+    { label: '<style>', ok: /<style[\s>]/i.test(html) },
+    { label: '<script>', ok: /<script[\s>]/i.test(html) },
+    { label: 'Font Awesome', ok: /font-awesome|fontawesome/i.test(html) },
+    { label: 'Konstanta SCHOOL', ok: /const\s+SCHOOL/i.test(html) },
+    { label: 'Konstanta TEACHER', ok: /const\s+TEACHER/i.test(html) },
+    { label: 'Login siswa', ok: /login|identitas|nama lengkap|peserta didik/i.test(html) },
+    { label: 'Tab/Konten materi', ok: /tab|lesson|materi|panel|sub-?bab/i.test(html) },
+    { label: 'Latihan bertahap', ok: /latihan|exercise|step|langkah/i.test(html) },
+    { label: 'Kuis', ok: /kuis|quiz|soal/i.test(html) },
+    { label: 'Refleksi', ok: /refleksi|reflection/i.test(html) },
+    { label: 'Laporan/PDF', ok: /laporan|pdf|print/i.test(html) },
+    { label: 'localStorage', ok: /localStorage/i.test(html) },
+    { label: 'Mode gelap', ok: /dark|gelap|theme|moon|sun/i.test(html) }
+  ];
+  const gagal = checks.filter(c => !c.ok);
+
+  $("checklistArea").style.display = 'block';
+  $("checklist").innerHTML = checks.map(c => `
+    <div class="item ${c.ok ? 'ok' : 'no'}">
+      <i class="fa-solid ${c.ok ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+      ${escapeHTML(c.label)}
+    </div>
+  `).join('');
+
+  const skor = checks.length - gagal.length;
+  if (gagal.length) {
+    setStatus('warn', `Struktur HTML: ${skor}/${checks.length} elemen terdeteksi. Kurang: ${gagal.map(g=>g.label).join(', ')}. Tetap ditampilkan.`, 'statusHTML');
+  } else {
+    setStatus('ok', `Struktur HTML lengkap! (${skor}/${checks.length} elemen terdeteksi)`, 'statusHTML');
+  }
+
+  $("previewCard").style.display = 'block';
+  $("previewFrame").srcdoc = html;
+  $("previewCard").scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function bersihkanHTML() {
+  $("htmlInput").value = '';
+  $("statusHTML").className = 'status';
+  $("previewCard").style.display = 'none';
+  $("checklistArea").style.display = 'none';
+  $("previewFrame").srcdoc = '';
+}
+
+function unduhHTML() {
+  const html = $("htmlInput").value.trim();
+  if (!html) return setStatus('err', 'Tidak ada HTML untuk diunduh.', 'statusHTML');
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'aplikasi-' + ($("judulBab").value.trim().slice(0,20).replace(/\s+/g,'-') || 'kelompok') + '.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  setStatus('ok', 'File .html diunduh!', 'statusHTML');
+}
+
+function bukaTabBaru() {
+  const html = $("htmlInput").value.trim();
+  if (!html) return setStatus('warn', 'Tidak ada HTML.', 'statusHTML');
+  const w = window.open('', '_blank');
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+}
+
+/* ============================================================
+   MODAL PREVIEW
+   ============================================================ */
+function bukaModalPreview() {
+  const html = $("htmlInput").value.trim();
+  if (!html) return setStatus('warn', 'Tidak ada HTML.', 'statusHTML');
+  $("modalPreviewFrame").srcdoc = html;
+  $("modalPreviewBg").classList.add('show');
+}
+function tutupModalPreview() {
+  $("modalPreviewBg").classList.remove('show');
+  $("modalPreviewFrame").srcdoc = '';
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderPreset();
+renderGaleri();
+renderRiwayat();
+</script>
+
+</body>
+</html>
