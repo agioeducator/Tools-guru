@@ -23,22 +23,6 @@
     margin: 0; font-family: Arial, sans-serif;
     background: var(--bg); color: var(--text);
     line-height: 1.6; transition: background 0.3s, color 0.3s;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  /* Izinkan seleksi & copy di area form, preview prompt, dan textarea */
-  input, textarea, select,
-  .preview, .preview *,
-  .panca-item, .panca-item * {
-    -webkit-user-select: text !important;
-    -khtml-user-select: text !important;
-    -moz-user-select: text !important;
-    -ms-user-select: text !important;
-    user-select: text !important;
   }
   header {
     background: linear-gradient(135deg, #0f2444, var(--p2));
@@ -244,18 +228,6 @@
 
   footer { text-align: center; padding: 20px; color: var(--muted); font-size: 12.5px; }
 
-  /* Overlay peringatan DevTools & Print */
-  #devtoolsOverlay, #printOverlay {
-    position: fixed; inset: 0; z-index: 99999;
-    display: none; align-items: center; justify-content: center;
-    flex-direction: column; text-align: center; padding: 30px;
-    font-family: Arial, sans-serif;
-  }
-  #devtoolsOverlay { background: #0b1220; color: #e5e7eb; }
-  #printOverlay { background: #000; color: #fff; font-size: 20px; }
-  #devtoolsOverlay h2 { color: #f4b942; margin: 0 0 12px; font-size: 22px; }
-  #devtoolsOverlay p { max-width: 520px; line-height: 1.7; color: #cbd5e1; }
-
   @media (max-width: 600px) {
     main { padding: 14px 12px 40px; }
     .card { padding: 16px; }
@@ -264,18 +236,6 @@
     .history-item { flex-direction: column; align-items: flex-start; }
     .history-item .actions { width: 100%; }
     .history-item .actions button { flex: 1; }
-  }
-
-  /* Sembunyikan konten saat print (kecuali jika perlu) */
-  @media print {
-    body.print-blocked * { visibility: hidden !important; }
-    body.print-blocked::after {
-      content: "Pencetakan dibatasi pada halaman ini.";
-      visibility: visible !important;
-      position: fixed; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; background: #fff; color: #000;
-    }
   }
 </style>
 </head>
@@ -311,19 +271,7 @@
       </ol>
     </div>
 
-    <!-- KODE AKSES GURU -->
-    <div class="card">
-      <h2><i class="fa-solid fa-key"></i> Akses Guru</h2>
-      <p style="font-size:13px;color:var(--muted);margin-top:0;">
-        Masukkan kode akses untuk membuka form.</p>
-      <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <input type="password" id="kodeInput" placeholder="Masukkan kode akses guru" style="flex:1; min-width:200px;">
-        <button class="btn-primary" onclick="cekKode()"><i class="fa-solid fa-unlock"></i> Buka Form</button>
-      </div>
-      <div class="status" id="statusKode"></div>
-    </div>
-
-    <div id="formArea" style="display:none;">
+    <div id="formArea" style="display:block;">
       <div class="card">
         <h2><i class="fa-solid fa-puzzle-piece"></i> Isi Tema Kelompok</h2>
 
@@ -481,19 +429,7 @@
   </div>
 </div>
 
-<!-- OVERLAY PROTEKSI -->
-<div id="devtoolsOverlay">
-  <h2>⚠ Akses Dibatasi</h2>
-  <p>Alat pengembang (DevTools) terdeteksi.<br>Silakan tutup DevTools untuk melanjutkan menggunakan aplikasi ini.</p>
-</div>
-<div id="printOverlay">🖨 Pencetakan halaman ini dibatasi.</div>
-
 <script>
-/* ============================================================
-   KONFIGURASI
-   ============================================================ */
-const KODE_GURU = "RUANGGURU"; // GANTI: kode akses guru
-
 /* ============================================================
    MASTER PROMPT v3.1
    ============================================================ */
@@ -603,129 +539,11 @@ const GALERI = [
    STATE & UTIL
    ============================================================ */
 let promptTerakhir = "";
-let aksesTerbuka = false;
 
 function escapeHTML(str) {
   return String(str).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[m]);
 }
 function $(id){ return document.getElementById(id); }
-
-/* ============================================================
-   PROTEKSI KEAMANAN
-   ============================================================ */
-(function proteksi() {
-  // 1. Blokir Ctrl+U, Ctrl+S, F12, Ctrl+Shift+I/J/C
-  document.addEventListener('keydown', function(e) {
-    const k = (e.key || '').toLowerCase();
-    const tag = (e.target && e.target.tagName ? e.target.tagName : '').toLowerCase();
-    const isField = (tag === 'input' || tag === 'textarea');
-
-    if (e.ctrlKey && !e.shiftKey && !e.altKey && k === 'u') { e.preventDefault(); return false; }
-    if (e.ctrlKey && !e.shiftKey && !e.altKey && k === 's') { e.preventDefault(); return false; }
-    if (k === 'f12') { e.preventDefault(); return false; }
-    if (e.ctrlKey && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) { e.preventDefault(); return false; }
-    if (e.ctrlKey && !e.shiftKey && !e.altKey && k === 'a' && !isField) { e.preventDefault(); return false; }
-  }, false);
-
-  // 2. Blokir klik kanan (kecuali di form)
-  document.addEventListener('contextmenu', function(e) {
-    const tag = (e.target && e.target.tagName ? e.target.tagName : '').toLowerCase();
-    if (tag === 'input' || tag === 'textarea') return true;
-    e.preventDefault(); return false;
-  }, false);
-
-  // 3. Blokir copy/cut/drag di luar form & preview
-  function isAllowedCopyTarget(t) {
-    if (!t) return false;
-    const tag = (t.tagName || '').toLowerCase();
-    if (tag === 'input' || tag === 'textarea') return true;
-    if (t.closest && (t.closest('.preview') || t.closest('.panca-item'))) return true;
-    return false;
-  }
-  document.addEventListener('copy', function(e) {
-    if (!isAllowedCopyTarget(e.target)) { e.preventDefault(); return false; }
-  }, false);
-  document.addEventListener('cut', function(e) {
-    if (!isAllowedCopyTarget(e.target)) { e.preventDefault(); return false; }
-  }, false);
-  document.addEventListener('dragstart', function(e) {
-    e.preventDefault(); return false;
-  }, false);
-
-  // 4. Blokir double-click select
-  document.addEventListener('mousedown', function(e) {
-    if (e.detail > 1) {
-      const tag = (e.target && e.target.tagName ? e.target.tagName : '').toLowerCase();
-      if (tag !== 'input' && tag !== 'textarea') e.preventDefault();
-    }
-  }, false);
-
-  // 5. Deteksi DevTools terbuka (heuristik)
-  let devOpen = false;
-  const threshold = 160;
-  setInterval(function() {
-    const wDiff = window.outerWidth - window.innerWidth > threshold;
-    const hDiff = window.outerHeight - window.innerHeight > threshold;
-    const ov = document.getElementById('devtoolsOverlay');
-    if (!ov) return;
-    if (wDiff || hDiff) {
-      if (!devOpen) {
-        devOpen = true;
-        ov.style.display = 'flex';
-        const fa = document.getElementById('formArea');
-        if (fa) fa.style.visibility = 'hidden';
-      }
-    } else if (devOpen) {
-      devOpen = false;
-      ov.style.display = 'none';
-      const fa = document.getElementById('formArea');
-      if (fa) fa.style.visibility = 'visible';
-    }
-  }, 800);
-
-  // 6. Blokir print (kecuali dari aplikasi siswa yang di-preview)
-  window.addEventListener('beforeprint', function() {
-    if (window !== window.top) return; // izinkan print di iframe preview
-    document.body.classList.add('print-blocked');
-    const ov = document.getElementById('printOverlay');
-    if (ov) ov.style.display = 'flex';
-  });
-  window.addEventListener('afterprint', function() {
-    document.body.classList.remove('print-blocked');
-    const ov = document.getElementById('printOverlay');
-    if (ov) ov.style.display = 'none';
-  });
-})();
-
-/* ============================================================
-   KODE AKSES GURU
-   ============================================================ */
-function cekKode() {
-  const kode = $("kodeInput").value.trim();
-  if (kode === KODE_GURU) {
-    aksesTerbuka = true;
-    $("formArea").style.display = 'block';
-    setStatusKode('ok', 'Akses diberikan. Form siap diisi.');
-    try { sessionStorage.setItem("genAkses", "1"); } catch(e){}
-  } else {
-    setStatusKode('err', 'Kode akses salah. Coba lagi.');
-  }
-}
-function setStatusKode(tipe, msg) {
-  const el = $("statusKode");
-  el.className = "status " + tipe;
-  let icon = tipe === 'ok' ? '<i class="fa-solid fa-circle-check"></i> ' : '<i class="fa-solid fa-circle-xmark"></i> ';
-  el.innerHTML = icon + msg;
-  if (tipe === 'ok') setTimeout(() => { el.className = "status"; }, 5000);
-}
-(function initAkses(){
-  try {
-    if (sessionStorage.getItem("genAkses") === "1") {
-      aksesTerbuka = true;
-      $("formArea").style.display = 'block';
-    }
-  } catch(e){}
-})();
 
 /* ============================================================
    TAB PANEL
@@ -1003,10 +821,6 @@ function pakaiRiwayat(i) {
   promptTerakhir = r.prompt;
   $("preview").innerHTML = escapeHTML(r.prompt).replace(/\n/g, '<br>');
   bukaPanel(0);
-  if (!aksesTerbuka) {
-    $("formArea").style.display = 'block';
-    aksesTerbuka = true;
-  }
   setStatus('ok', 'Riwayat dimuat.');
 }
 function hapusSatu(i) {
